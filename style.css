@@ -926,3 +926,49 @@ and (max-width:1023px){
   padding:10px 25px;
   min-width:120px;
 }
+.marquee-container{
+  width:100%;
+  overflow:hidden;
+  background:#fff8e1;
+  padding:10px 0;
+  border-radius:10px;
+}
+
+.marquee-text{
+  display:inline-block;
+  white-space:nowrap;
+  font-weight:bold;
+  font-size:18px;
+  color:#ff6f00;
+  padding-left:100%;
+  animation:marquee 15s linear infinite;
+}
+
+@keyframes marquee{
+  from{
+    transform:translateX(0);
+  }
+  to{
+    transform:translateX(-100%);
+  }
+}
+@media (max-width:768px){
+
+  header{
+    flex-direction: column;
+    align-items: center;
+  }
+
+  header nav{
+    margin-left:0 !important;
+    width:100%;
+  }
+
+  header nav ul{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+}
