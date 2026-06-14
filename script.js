@@ -209,7 +209,7 @@ if (!peserta) {
 
   document
     .querySelectorAll(
-      ".halaman, .halaman-konten"
+      ".halaman,.halaman-konten,#identity-form"
     )
     .forEach(
       el => el.style.display = "none"
@@ -232,7 +232,7 @@ window.isTrialMode = true;
 // tampilkan halaman identitas
 document
   .querySelectorAll(
-    ".halaman, .halaman-konten"
+    ".halaman,.halaman-konten,#identity-form"
   )
   .forEach(el =>
     el.style.display = "none"
@@ -299,7 +299,7 @@ Selamat datang ${user.nama}`
 }, 1500);
   document
     .querySelectorAll(
-      ".halaman, .halaman-konten"
+      ".halaman,.halaman-konten,#identity-form"
     )
     .forEach(
       el =>
@@ -363,7 +363,7 @@ document
 
     document
       .querySelectorAll(
-        ".halaman, .halaman-konten"
+        ".halaman,.halaman-konten,#identity-form"
       )
       .forEach(
         el =>
@@ -394,7 +394,7 @@ document
   
   document
     .querySelectorAll(
-      ".halaman, .halaman-konten"
+      ".halaman,.halaman-konten,#identity-form"
     )
     .forEach(
       el =>
@@ -1925,7 +1925,7 @@ document.addEventListener(
 
       document
         .querySelectorAll(
-          ".halaman, .halaman-konten"
+          ".halaman,.halaman-konten,#identity-form"
         )
         .forEach(
           el => el.style.display = "none"
@@ -2054,7 +2054,8 @@ daftarMenu.forEach(nama => {
     )
     .map(item => `
       <button
-        class="tombol-3d">
+        class="tombol-3d"
+        data-paket="${item}">
         ${item}
       </button>
     `)
@@ -2195,9 +2196,9 @@ async function updateInfoPaketTombol() {
   try {
 
     const email =
-      window.loggedInEmail
-        .trim()
-        .toLowerCase();
+  (window.loggedInEmail || "")
+    .trim()
+    .toLowerCase();
 
     // ====================
     // HARGA PAKET
@@ -2251,10 +2252,7 @@ const dataPaket =
       .forEach(btn => {
 
         const namaPaket =
-          btn.textContent
-            .replace("OK", "")
-            .replace("BELI PAKET", "")
-            .trim();
+  btn.dataset.paket || "";
 
         // ====================
         // STATUS
@@ -2286,19 +2284,18 @@ const statusRow =
       new Date(a.Tanggal)
   )[0];
         const status =
-  !email
-    ? "LOGIN"
-    : (
-        statusRow &&
-        (statusRow.Keaktifan || "")
-          .trim()
-          .toUpperCase() === "AKTIF" &&
-        (statusRow.Permission || "")
-          .trim()
-          .toUpperCase() === "OK"
-      )
-        ? "OK"
-        : "BELI PAKET";
+  (
+    email &&
+    statusRow &&
+    (statusRow.Keaktifan || "")
+      .trim()
+      .toUpperCase() === "AKTIF" &&
+    (statusRow.Permission || "")
+      .trim()
+      .toUpperCase() === "OK"
+  )
+    ? "OK"
+    : "BELI PAKET";
 
         // ====================
         // HARGA
@@ -2432,9 +2429,8 @@ const jumlahPaket =
       background:${
   status==="OK"
     ? "#00c853"
-    : status==="LOGIN"
-      ? "#2196f3"
-      : "#ff5252"
+    : "#ff5252"
+};
 };
       color:white;
       font-weight:bold;
@@ -2445,10 +2441,8 @@ const jumlahPaket =
   >
     ${
   status === "OK"
-    ? "✅ AKTIF"
-    : status === "LOGIN"
-      ? "🔐 LOGIN"
-      : "🛒 BELI PAKET"
+  ? "✅ AKTIF"
+  : "🛒 BELI PAKET"
 }
   </span>
         `;
