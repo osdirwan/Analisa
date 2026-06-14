@@ -1,3 +1,4 @@
+
 // =====================================================
 // SESSION QUIZ
 // =====================================================
@@ -28,6 +29,116 @@ if (emailFromURL) {
 
 
 declareVariables();
+async function loadKelasPeserta(email) {
+
+  const kelasInput =
+    document.getElementById("kelas");
+
+  kelasInput.innerHTML =
+    '<option>Memuat...</option>';
+
+  try {
+
+    const url =
+      "https://opensheet.elk.sh/15rUUAyWjGOMrT3Nz1hEbBQgn1OYY0OB-xUx4hHOcnfQ/Sheet1";
+
+    const res =
+      await fetch(url);
+
+    const data =
+  await res.json();
+
+const rows =
+  data.filter(r =>
+    (r.Email || "")
+      .toString()
+      .trim()
+      .toLowerCase()
+    ===
+    email
+      .trim()
+      .toLowerCase()
+  );
+    const res2 = await fetch(
+    "https://opensheet.elk.sh/15rUUAyWjGOMrT3Nz1hEbBQgn1OYY0OB-xUx4hHOcnfQ/Sheet2"
+  );
+
+  const data2 =
+    await res2.json();
+    kelasInput.innerHTML = "";
+    kelasInput.innerHTML =
+  '<option value="">Pilih paket yang dibeli</option>';
+
+const paketUnik = new Set();
+
+rows.forEach(row => {
+
+  const paket = (row.Paket || "").trim();
+
+  const rowsPaket =
+  data2
+    .filter(r =>
+
+      (r.Email || "")
+        .trim()
+        .toLowerCase()
+
+      ===
+
+      email
+        .trim()
+        .toLowerCase()
+
+      &&
+
+      (r.Paket || "")
+        .trim()
+
+      ===
+
+      paket
+
+    )
+    .sort(
+      (a,b) =>
+        new Date(b.Tanggal) -
+        new Date(a.Tanggal)
+    );
+
+const aktif =
+  rowsPaket[0] &&
+  (rowsPaket[0].Keaktifan || "")
+    .toUpperCase() === "AKTIF" &&
+  (rowsPaket[0].Permission || "")
+    .toUpperCase() === "OK";
+
+  if (!aktif) return;
+
+  // CEGAH DUPLIKAT
+  if (paketUnik.has(paket)) return;
+
+  paketUnik.add(paket);
+
+  const option = document.createElement("option");
+
+  option.value = paket;
+  option.textContent = paket;
+
+  kelasInput.appendChild(option);
+
+});
+
+  } catch (err) {
+
+    console.error(err);
+
+    kelasInput.innerHTML =
+      '<option value="">Gagal memuat kelas</option>';
+
+  }
+
+}
+
 
 // Ambil data peserta dari spreadsheet
 fetch("https://opensheet.elk.sh/18mQe0-u4ma9mEemc5L6zN6AWe6IbfopdDIlhUKM1WEE/PESERTA")
@@ -37,10 +148,10 @@ fetch("https://opensheet.elk.sh/18mQe0-u4ma9mEemc5L6zN6AWe6IbfopdDIlhUKM1WEE/PES
       email: (row.Email || "").trim().toLowerCase(),
       nama: row.Nama || "",
       asalSekolah: row["Asal Sekolah"] || "",
-      kurikulum: row["Kurikulum"] || "",
       kelas: row.Kelas || "",
       password: row.Password || "",
       pesan: row["Pesan Pribadi"] || ""
+      
     }));
 
     if (window.loggedInEmail) {
@@ -54,68 +165,417 @@ const loginForm = document.getElementById("login-form");
 if (loginForm) {
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    const email = document.getElementById("login-email").value.trim().toLowerCase();
-    const password = document.getElementById("login-password").value.trim();
+    const email =
+  document.getElementById("login-email")
+    .value
+    .trim()
+    .toLowerCase();
 
-    const user = window.pesertaList?.find(p => p.email === email && p.password === password);
+const password =
+  document.getElementById("login-password")
+    .value
+    .trim();
 
-if (user) {
-  if ((user.status || "").trim().toUpperCase() === "OK") {
-    alert("Login berhasil!");
-    window.loggedInEmail = user.email;
-
-    document.querySelectorAll(".halaman, .halaman-konten").forEach(el => el.style.display = "none");
-    document.getElementById("login-page").style.display = "none";
-    document.getElementById("beranda").style.display = "block";
-  } else {
-    // ✅ Tampilkan alert bawaan browser dengan 2 pilihan
-    if (confirm("❗ Anda belum membeli paket.\nBelilah paket untuk mendapatkan lebih banyak soal\n\nKlik OK untuk untuk kembali ke Beranda dan klik menu Beli Paket \nKlik Cancel untuk mencoba Soal Trial (klik menu Belajar atau Tryout)")) {
-      alert("Anda masuk mode Trial.");
-      window.loggedInEmail = email;
-      
-      document.querySelectorAll(".halaman, .halaman-konten").forEach(el => el.style.display = "none");
-      document.getElementById("login-page").style.display = "none";
-      document.getElementById("form-identitas").style.display = "block";
-    } else {
-      document.querySelectorAll(".halaman, .halaman-konten").forEach(el => el.style.display = "none");
-      document.getElementById("login-page").style.display = "none";
-      document.getElementById("beranda").style.display = "block";
-    }
-  }
+if (!email) {
+  alert("Silakan isi Email");
+  return;
 }
+
+if (!password) {
+  alert("Silakan isi Password");
+  return;
+}
+
+const regexEmail =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!regexEmail.test(email)) {
+  alert("Format Email tidak valid");
+  return;
+}
+
+const peserta =
+  window.pesertaList?.find(
+    p => p.email === email
+  );
+
+// EMAIL TIDAK TERDAFTAR
+// EMAIL TIDAK TERDAFTAR
+if (!peserta) {
+
+  const daftar = confirm(
+    "Kamu belum membuat Akun, silakan Sign Up terlebih dahulu.\n\nKlik OK untuk Sign Up.\nKlik Cancel untuk mencoba Trial Version."
+  );
+
+  document
+    .querySelectorAll(
+      ".halaman, .halaman-konten"
+    )
+    .forEach(
+      el => el.style.display = "none"
+    );
+
+  if (daftar) {
+
+    // OK → SIGN UP
+    document
+      .getElementById("signup-page")
+      .style.display = "block";
+
+  } else {
+
+    // CANCEL → TRIAL VERSION
+alert("Anda masuk mode Trial.");
+
+window.isTrialMode = true;
+
+// tampilkan halaman identitas
+document
+  .querySelectorAll(
+    ".halaman, .halaman-konten"
+  )
+  .forEach(el =>
+    el.style.display = "none"
+  );
+
+document.getElementById(
+  "identity-form"
+).style.display = "block";
+
+// isi email login
+const emailLogin =
+  document.getElementById(
+    "login-email"
+  ).value.trim();
+
+document.getElementById(
+  "email"
+).value = emailLogin;
+
+// isi paket trial
+document.getElementById(
+  "kelas"
+).innerHTML = `
+  <option value="">Pilih paket yang dibeli</option>
+  <option value="BAHASA INGGRIS Trial">BAHASA INGGRIS Trial</option>
+  <option value="MATEMATIKA Trial">MATEMATIKA Trial</option>
+  <option value="PENDIDIKAN PANCASILA Trial">PENDIDIKAN PANCASILA Trial</option>
+`;
+
+    startBtn.disabled = false;
+
+  }
+
+  return;
+}
+const user = peserta;
+
+// LANJUTKAN KODE LOGIN
+if (
+  (user.status || "")
+    .trim()
+    .toUpperCase() === "OK"
+) {
+
+  alert(
+`✅ Login berhasil
+
+Selamat datang ${user.nama}`
+  );
+
+  window.loggedInEmail =
+    user.email;
+
+  window.loggedInNama =
+    user.nama;
+  window.loggedInEmail = user.email;
+
+  window.loggedInNama = user.nama;
+
+ setTimeout(() => {
+
+  updateInfoPaketTombol();
+
+}, 1500);
+  document
+    .querySelectorAll(
+      ".halaman, .halaman-konten"
+    )
+    .forEach(
+      el =>
+        el.style.display =
+          "none"
+    );
+
+  document
+  .querySelectorAll(
+    ".halaman, .halaman-konten, #identity-form"
+  )
+  .forEach(el => {
+    el.style.display = "none";
+  });
+
+document
+  .getElementById(
+    "beranda"
+  )
+  .style.display = "block";
+
+  // Isi otomatis data peserta
+  emailInput.value =
+    user.email || "";
+
+  nameInput.value =
+    user.nama || "Belum diketahui";
+
+  sekolahInput.value =
+    user.asalSekolah ||
+    "Belum diketahui";
+
+  passwordInput.value =
+    user.password || "";
+
+  // Reset dropdown
+  mapelInput.innerHTML =
+    '<option value="">Pilih Mata Pelajaran</option>';
+
+  babInput.innerHTML =
+    '<option value="">Pilih Bab Materi</option>';
+
+  paketInput.innerHTML =
+    '<option value="">Pilih Paket</option>';
+
+  // Muat paket yang dibeli
+  loadKelasPeserta(
+    user.email
+  );
+
+  // Validasi password
+  validatePassword();
+
+} else {
+
+  if (
+    confirm(
+      "❗ Anda belum membeli paket.\nBelilah paket untuk mendapatkan lebih banyak soal\n\nKlik OK untuk kembali ke Beranda dan klik menu Beli Paket\nKlik Cancel untuk mencoba Soal Trial"
+    )
+  ) {
+
+    document
+      .querySelectorAll(
+        ".halaman, .halaman-konten"
+      )
+      .forEach(
+        el =>
+          el.style.display =
+            "none"
+      );
+
+    document
+      .getElementById(
+        "beranda"
+      )
+      .style.display =
+        "block";
+
+  } else {
+
+  alert(
+    "Anda masuk mode Trial."
+  );
+
+  window.loggedInEmail =
+    user.email;
+
+  window.loggedInNama =
+    user.nama;
+
+  window.isTrialMode = true; // MODE TRIAL
+  
+  document
+    .querySelectorAll(
+      ".halaman, .halaman-konten"
+    )
+    .forEach(
+      el =>
+        el.style.display =
+          "none"
+    );
+
+  document
+    .getElementById(
+      "login-page"
+    )
+    .style.display =
+      "none";
+
+  document
+  .getElementById(
+    "identity-form"
+  )
+  .style.display =
+    "block";
+// ==============================
+// IDENTITAS TRIAL
+// ==============================
+
+emailInput.value = user.email || "";
+
+nameInput.value =
+  user.nama || "Belum diketahui";
+
+sekolahInput.value =
+  user.asalSekolah || "Belum diketahui";
+
+passwordInput.value =
+  user.password || "";
+
+// ==============================
+// PAKET TRIAL
+// ==============================
+
+kelasInput.disabled = false;
+kelasInput.style.opacity = "1";
+kelasInput.style.pointerEvents = "auto";
+
+kelasInput.innerHTML = `
+  <option value="" selected>
+    Pilih Paket yang dibeli
+  </option>
+  <option value="BAHASA INGGRIS Trial">
+    BAHASA INGGRIS Trial
+  </option>
+  <option value="MATEMATIKA Trial">
+    MATEMATIKA Trial
+  </option>
+  <option value="PENDIDIKAN PANCASILA Trial">
+    PENDIDIKAN PANCASILA Trial
+  </option>
+`;
+
+// ==============================
+// RESET DROPDOWN
+// ==============================
+
+mapelInput.innerHTML = `
+  <option value="">
+    Pilih Mata Pelajaran
+  </option>
+`;
+
+babInput.innerHTML = `
+  <option value="">
+    Pilih Bab Materi
+  </option>
+`;
+
+paketInput.innerHTML = `
+  <option value="">
+    Pilih Paket
+  </option>
+`;
+
+paketInput.disabled = false;
+
+// aktifkan tombol mulai
+passwordMessage.textContent = "";
+startBtn.disabled = false;
+// ==============================
+// ISI OTOMATIS IDENTITAS PESERTA
+// ==============================
+
+emailInput.value = user.email || "";
+nameInput.value =
+  user.nama || "Belum diketahui";
+
+sekolahInput.value =
+  user.asalSekolah || "Belum diketahui";
+passwordInput.value = user.password || "";
+
+
+emailInput.readOnly = true;
+
+passwordInput.readOnly = true;
+
+// Aktifkan tombol MULAI
+passwordMessage.textContent = "";
+startBtn.disabled = false;
+
+// ==============================
+// ISI OTOMATIS PAKET TRIAL
+// ==============================
+
+kelasInput.innerHTML = `
+  <option value="">Pilih paket yang dibeli</option>
+  <option value="BAHASA INGGRIS Trial">BAHASA INGGRIS Trial</option>
+  <option value="MATEMATIKA Trial">MATEMATIKA Trial</option>
+  <option value="PENDIDIKAN PANCASILA Trial">PENDIDIKAN PANCASILA Trial</option>
+`;
+
+
+
+// trigger agar mapel terisi
+kelasInput.dispatchEvent(
+  new Event("change")
+);
+
+}
+
+}
+
+
   });
 }
 
 // TOMBOL BELAJAR/TRYOUT AKTIFKAN FORM IDENTITAS DENGAN VALIDASI LOGIN
 
-document.addEventListener("DOMContentLoaded", function () {
-  const semuaTombolKelas = document.querySelectorAll(".tombol-3d");
+document.addEventListener(
+  "click",
+  function(e){
 
-  semuaTombolKelas.forEach(btn => {
-  btn.addEventListener("click", function () {
+    const btn =
+      e.target.closest(
+        ".tombol-3d"
+      );
+
+    if (!btn) return;
+
     if (!window.loggedInEmail) {
-      alert("⚠️ Kamu belum login");
-      document.querySelectorAll(".halaman, .halaman-konten, #identity-form").forEach(el => el.style.display = "none");
-      document.getElementById("beranda").style.display = "block";
-      return;
-      
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      alert(
+        "Silakan login terlebih dahulu"
+      );
+
+      document
+        .querySelectorAll(
+          ".halaman,.halaman-konten,#identity-form,#daftar-paket"
+        )
+        .forEach(el => {
+          el.style.display = "none";
+        });
+
+      document
+        .getElementById(
+          "login-page"
+        )
+        .style.display = "block";
+
+      return false;
     }
 
-    document.querySelectorAll(".halaman, .halaman-konten").forEach(hal => hal.style.display = "none");
-    document.getElementById("identity-form").style.display = "block";
-
-    const emailInput = document.getElementById("email");
-    emailInput.value = window.loggedInEmail;
-    emailInput.dispatchEvent(new Event("blur"));
-  });
-});
-});
+  },
+  true
+);
 
 function declareVariables() {
   nameInput = document.getElementById("name");
   emailInput = document.getElementById("email");
   sekolahInput = document.getElementById("sekolah");
-  kurikulumInput = document.getElementById("kurikulum");
+  
   kelasInput = document.getElementById("kelas");
   mapelInput = document.getElementById("mapel");
   babInput = document.getElementById("bab");
@@ -149,90 +609,65 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => {
       window.pesertaList = data.map(row => ({
-        email: (row.Email || "").trim().toLowerCase(),
-        nama: row.Nama || "",
-        asalSekolah: row["Asal Sekolah"] || "",
-        kurikulum: row["Kurikulum"] || "",
-        kelas: row.Kelas || "",
-        password: row.Password || "",
-        pesan: row["Pesan Pribadi"] || "",
-        status: row["Status"] || ""
-      }));
+  email: (row.Email || "").trim().toLowerCase(),
+  nama: row.Nama || "",
+  asalSekolah: row["Asal Sekolah"] || "",
+  
+  kelas: row.Kelas || "",
+  password: row.Password || "",
+  pesan: row["Pesan Pribadi"] || "",
+  status: row.Status || ""
+}));
     })
     .catch(err => console.error("❌ Gagal memuat data peserta:", err));
 });
 
 // Autofill data berdasarkan email
 emailInput.addEventListener("blur", () => {
-  const email = emailInput.value.trim().toLowerCase();
-  const peserta = window.pesertaList.find(p => p.email === email);
+
+  const email =
+    emailInput.value.trim().toLowerCase();
+
+  const peserta =
+    window.pesertaList.find(
+      p => p.email === email
+    );
 
   if (peserta) {
-    nameInput.value = peserta.nama;
-    sekolahInput.value = peserta.asalSekolah;
-    kurikulumInput.value = peserta.kurikulum;
-    kelasInput.value = peserta.kelas;
-    passwordInput.value = peserta.password;
 
-    document.getElementById('pesan-motivasi').innerText = peserta.pesan || "Semangat ya!";
+    nameInput.value =
+      peserta.nama || "Belum diketahui";
 
-    nameInput.readOnly = true;
-    sekolahInput.readOnly = true;
-    kurikulumInput.readOnly = true;
-    kelasInput.readOnly = true;
-    passwordInput.readOnly = true;
+    sekolahInput.value =
+      peserta.asalSekolah || "Belum diketahui";
+
+    // HANYA UNTUK USER BERBAYAR
+    if (!window.isTrialMode) {
+      loadKelasPeserta(email);
+    }
+
+    passwordInput.value =
+      peserta.password;
+
+    document.getElementById(
+      "pesan-motivasi"
+    ).innerText =
+      peserta.pesan || "Semangat ya!";
 
     validatePassword();
-    if (peserta.kelas && peserta.kurikulum) {
-      loadMapelList(peserta.kelas);
-    }
-  } else {
-    alert("Email tidak ditemukan.");
-    nameInput.value = "";
-    sekolahInput.value = "";
-    kurikulumInput.value = "";
-    kelasInput.value = "";
-    passwordInput.value = "";
-    document.getElementById('pesan-motivasi').innerText = "Semangat ya!";
-    nameInput.readOnly = false;
-    sekolahInput.readOnly = false;
-    kurikulumInput.readOnly = false;
-    kelasInput.readOnly = false;
-    passwordInput.readOnly = false;
+
   }
+
 });
-
-// Validasi password
-function validatePassword() {
-  const email = emailInput.value.trim();
-  const enteredPassword = passwordInput.value.trim();
-  const peserta = window.pesertaList.find(p => p.email === email.toLowerCase());
-
-  if (!peserta) {
-    passwordMessage.textContent = "Email tidak ditemukan.";
-    startBtn.disabled = true;
-  } else if (peserta.password === enteredPassword) {
-    passwordMessage.textContent = "";
-    startBtn.disabled = false;
-  } else {
-    passwordMessage.textContent = "SALAH PASSWORD";
-    startBtn.disabled = true;
-  }
-}
 
 passwordInput.addEventListener("input", validatePassword);
 emailInput.addEventListener("input", validatePassword);
 
 // Fungsi untuk memuat mapel
 function loadMapelList(kelas) {
-  const kurikulum = kurikulumInput.value.trim();
-  if (!kurikulum) {
-    mapelInput.innerHTML = '<option value="">Isi kurikulum terlebih dahulu</option>';
-    return;
-  }
 
-  const url = `https://script.google.com/macros/s/AKfycbzcFz3Tm6C9-TPHK7M5NqNykCEiXxROkOtYxZxTpaPsmnS1cxsfprG89cfz9C9DukGc/exec?kelas=${encodeURIComponent(kelas)}&kurikulum=${encodeURIComponent(kurikulum)}`;
-
+  const url =
+    `https://script.google.com/macros/s/AKfycbzcFz3Tm6C9-TPHK7M5NqNykCEiXxROkOtYxZxTpaPsmnS1cxsfprG89cfz9C9DukGc/exec?kelas=${encodeURIComponent(kelas)}`;
   mapelInput.innerHTML = '<option>Memuat...</option>';
 
   fetch(url)
@@ -283,10 +718,9 @@ function loadMapelList(kelas) {
 ["input", "blur"].forEach(evt => {
   kelasInput.addEventListener(evt, () => {
     const selectedKelas = kelasInput.value.trim();
-    const kurikulum = kurikulumInput.value.trim();
-    if (selectedKelas && kurikulum) {
-      loadMapelList(selectedKelas);
-    }
+    if (selectedKelas) {
+    loadMapelList(selectedKelas);
+  }
   });
 });
 
@@ -384,7 +818,9 @@ babInput.addEventListener("change", () => {
   durasiInput.value = matchedRow["Durasi"] || "";
  
   // 🔒 Disable input paket jika hanya 1 pilihan
-  paketInput.disabled = paketKe === "1";
+  paketInput.disabled =
+  !window.isTrialMode &&
+  paketKe === "1";
  
 } else {
   jumlahSoalInput.value = "";
@@ -543,11 +979,26 @@ function toProperCase(text) {
     .join(' ');
 }
 startBtn.addEventListener("click",async () => {
+  if (window.isTrialMode) {
+
+  if (
+    !emailInput.value ||
+    !kelasInput.value ||
+    !mapelInput.value ||
+    !babInput.value ||
+    !paketInput.value ||
+    !durasiInput.value
+  ) {
+    alert("Harap lengkapi data terlebih dahulu!");
+    return;
+  }
+
+} else {
+
   if (
     !nameInput.value ||
     !emailInput.value ||
     !sekolahInput.value ||
-    !kurikulumInput.value || // tambahkan ini
     !kelasInput.value ||
     !mapelInput.value ||
     !babInput.value ||
@@ -557,6 +1008,8 @@ startBtn.addEventListener("click",async () => {
     alert("Harap lengkapi semua data terlebih dahulu!");
     return;
   }
+
+}
 //TOMBOL MULAI KUIZ
   try {
   await cekBatasPaketPerHari(); // ✅ Validasi batas 8 paket/hari
@@ -984,7 +1437,7 @@ function showSummary() {
     nama: nameInput.value,
     email: emailInput.value,
     sekolah: sekolahInput.value,
-    kurikulum: kurikulumInput.value,
+    
     kelas: kelasInput.value,
     mapel: mapelInput.value,
     bab: babInput.value,
@@ -1024,7 +1477,7 @@ Halo ${dataHasil.nama}...
 Berikut hasil kuis yang Ananda kerjakan:
 
 *🧾 Paket Soal*
-Kurikulum       : ${dataHasil.kurikulum}
+
 Kelas           : ${dataHasil.kelas}
 Mapel           : ${dataHasil.mapel}
 Bab             : ${dataHasil.bab}
@@ -1075,7 +1528,7 @@ function tampilkanLeaderboard() {
   const leaderboardDiv = document.getElementById("leaderboard");
   const tbody = document.querySelector("#leaderboard-table tbody");
 
-  const kurikulum = document.getElementById("kurikulum").value;
+  
   const kelas = document.getElementById("kelas").value;
   const mapel = document.getElementById("mapel").value;
   const bab = document.getElementById("bab").value;
@@ -1091,7 +1544,7 @@ function tampilkanLeaderboard() {
       const ranking = data
         .filter(row =>
           row.nilai &&
-          row.kurikulum === kurikulum &&
+          
           row.kelas === kelas &&
           row.mapel === mapel &&
           row.bab === bab &&
@@ -1115,7 +1568,7 @@ function tampilkanLeaderboard() {
 
       document.getElementById("filter-info").innerHTML = `
         <strong>Paket Soal:</strong> 
-        ${sentenceCase(kurikulum)}, 
+        
         ${sentenceCase(kelas)}, 
         ${sentenceCase(mapel)}, 
         Bab ${sentenceCase(bab)}, 
@@ -1162,7 +1615,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function cekRiwayatKuis() {
   const url = "https://opensheet.elk.sh/1sW3Yw1Ge_6yibNqXXvpyIzGgzrOnMzIePfIjqCHbqM0/DATANILAI";
   const email = emailInput.value.trim();
-  const kurikulum = kurikulumInput.value;
+  
   const sekolah = sekolahInput.value;
   const kelas = kelasInput.value;
   const mapel = mapelInput.value;
@@ -1173,7 +1626,7 @@ async function cekRiwayatKuis() {
 
   const history = data.filter(row =>
     row.email?.toLowerCase() === email.toLowerCase() &&
-    row.kurikulum === kurikulum &&
+    
     row.sekolah === sekolah &&
     row.kelas === kelas &&
     row.mapel === mapel &&
@@ -1239,7 +1692,7 @@ const rowDate = dateObj.toISOString().slice(0, 10);
     throw "BATAS_8_PAKET";
   }
 }
-async function jalankanReviewSoal(email, kurikulum, kelas, mapel, bab, paket) {
+async function jalankanReviewSoal(email, kelas, mapel, bab, paket) {
   const mappingUrl = `https://opensheet.elk.sh/15R8bAIdfe9kGQu__Uois7Myc0fFY9rPzP5KBKZjxkY0/Sheet2`;
   const hasilUrl = `https://opensheet.elk.sh/1QvyeKW5f0vnnZnoJTSXAvAz6AoID8kAtrXLZts-c5Y0/DATANILAI`;
  
@@ -1257,7 +1710,7 @@ async function jalankanReviewSoal(email, kurikulum, kelas, mapel, bab, paket) {
     const hasilData = await hasilRes.json();
     const riwayat = hasilData.filter(row =>
       row.email?.toLowerCase() === email.toLowerCase() &&
-      row.kurikulum === kurikulum &&
+      
       row.kelas === kelas &&
       row.mapel === mapel &&
       row.bab === bab &&
@@ -1319,15 +1772,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const bab = urlParams.get("bab") || "";
     const paket = urlParams.get("paket") || "";
     const mapel = urlParams.get("mapel") || "";
-    const kurikulum = urlParams.get("kurikulum") || "";
+    
     const kelas = urlParams.get("kelas") || "";
     const email = urlParams.get("email") || "";
     window.reviewMode = true;
-    window.reviewInfo = { bab, paket, mapel, kurikulum, kelas };
+    window.reviewInfo = { bab, paket, mapel, kelas };
  
     // ⏬ Tambahkan ini
-    if (email && kurikulum && kelas && mapel && bab && paket) {
-      jalankanReviewSoal(email, kurikulum, kelas, mapel, bab, paket);
+    if (email && kelas && mapel && bab && paket) {
+      jalankanReviewSoal(email, kelas, mapel, bab, paket);
     } else {
       alert("❌ Data tidak lengkap untuk review soal.");
     }
@@ -1461,3 +1914,554 @@ setInterval(() => {
   }
 
 }, 300);
+document.addEventListener(
+  "click",
+  function(e){
+
+    if(
+      e.target.id ===
+      "btn-metode-bayar"
+    ){
+
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document.getElementById(
+  "metode-bayar-page"
+).style.display = "block";
+
+    }
+
+  }
+);
+document.addEventListener(
+  "click",
+  function (e) {
+
+    if (
+      e.target.classList.contains(
+        "kembali-btn"
+      )
+    ) {
+
+      document
+        .querySelectorAll(
+          ".halaman,.halaman-konten,#identity-form,#quiz-box"
+        )
+        .forEach(el => {
+          el.style.display = "none";
+        });
+
+      document
+        .getElementById(
+          "beranda"
+        )
+        .style.display = "block";
+
+    }
+
+  }
+);
+async function loadMenuBelajar() {
+
+  const menu =
+    document.getElementById(
+      "menu-belajar-dinamis"
+    );
+
+  if (!menu) return;
+
+  try {
+
+    const res =
+      await fetch(
+        "https://opensheet.elk.sh/1DKNM74sV4SAVkOPmeSfCvQWmUxY8RDVrPmW6yuyi6Ww/Sheet1"
+      );
+
+    const data =
+      await res.json();
+
+    menu.innerHTML = "";
+
+    const daftarMenu =
+  [...new Set(
+    data.map(row =>
+      (Object.values(row)[1] || "")
+        .toString()
+        .trim()
+    )
+  )]
+  .filter(nama =>
+    nama &&
+    nama.toUpperCase() !==
+    "SOAL TRIAL VERSION"
+  )
+  .sort((a, b) =>
+    a.localeCompare(
+      b,
+      "id",
+      {
+        numeric: true,
+        sensitivity: "base"
+      }
+    )
+  );
+
+daftarMenu.forEach(nama => {
+
+  const id =
+    "belajar-" +
+    nama
+      .replace(/\s+/g, "-")
+      .toLowerCase();
+
+  menu.innerHTML += `
+    <li>
+      <a
+        href="#"
+        class="menu-belajar"
+        data-target="${id}">
+        ${nama}
+      </a>
+    </li>
+  `;
+
+  const tombol =
+    [...new Set(
+      data
+        .filter(row =>
+          Object.values(row)[1] === nama
+        )
+        .map(row =>
+          Object.values(row)[2]
+        )
+    )]
+    .filter(Boolean)
+    .sort((a, b) =>
+      a.localeCompare(
+        b,
+        "id",
+        {
+          numeric: true,
+          sensitivity: "base"
+        }
+      )
+    )
+    .map(item => `
+      <button
+        class="tombol-3d">
+        ${item}
+      </button>
+    `)
+    .join("");
+
+  const halaman =
+    document.createElement("div");
+
+  halaman.className =
+    "halaman-konten";
+
+  halaman.id = id;
+
+  halaman.innerHTML = `
+    <h2>${nama}</h2>
+    <div class="tombol-kelas-container grid-kelas">
+    ${tombol}
+    </div>
+    
+
+    <button class="kembali-btn">
+      KEMBALI
+    </button>
+  `;
+
+  document.body.appendChild(
+    halaman
+  );
+
+});
+    
+await updateInfoPaketTombol();
+    document
+      .querySelectorAll(
+        ".menu-belajar"
+      )
+      .forEach(link => {
+
+        link.onclick =
+          function(e){
+
+            e.preventDefault();
+
+            document
+              .querySelectorAll(
+                ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
+              )
+              .forEach(
+                el =>
+                  el.style.display =
+                    "none"
+              );
+
+            document
+              .getElementById(
+                this.dataset.target
+              )
+              .style.display =
+                "block";
+
+          };
+
+      });
+
+  } catch(err) {
+
+    console.error(err);
+
+    menu.innerHTML =
+      "<li><a href='#'>Gagal memuat</a></li>";
+
+  }
+
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadMenuBelajar
+);
+document.addEventListener("click", function(e){
+
+  const btn =
+    e.target.closest(".tombol-3d");
+
+  if (!btn) return;
+
+  const status =
+    btn.dataset.status || "BELI PAKET";
+
+  const paket =
+    btn.dataset.paket || "";
+
+  // simpan paket yang dipilih
+  window.paketDipilih = paket;
+
+  if (status === "OK") {
+
+    document
+      .querySelectorAll(
+        ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
+      )
+      .forEach(el =>
+        el.style.display = "none"
+      );
+
+    document
+      .getElementById(
+        "identity-form"
+      )
+      .style.display = "block";
+
+  } else {
+
+    document
+      .querySelectorAll(
+        ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
+      )
+      .forEach(el =>
+        el.style.display = "none"
+      );
+
+    document
+      .getElementById(
+        "daftar-paket"
+      )
+      .style.display = "block";
+
+  }
+
+});
+async function updateInfoPaketTombol() {
+
+  const email =
+  (window.loggedInEmail || "")
+    .trim()
+    .toLowerCase();
+
+  try {
+
+    const email =
+      window.loggedInEmail
+        .trim()
+        .toLowerCase();
+
+    // ====================
+    // HARGA PAKET
+    // ====================
+
+    const resHarga = await fetch(
+      "https://opensheet.elk.sh/1kAxPCGnlXmoz2U8RjoZ1pZCNOHXsWroBte9nVkZMwvg/Sheet1"
+    );
+
+    const dataHarga =
+      await resHarga.json();
+
+    // ====================
+    // STATUS PAKET
+    // ====================
+
+    const resStatus = await fetch(
+      "https://opensheet.elk.sh/15rUUAyWjGOMrT3Nz1hEbBQgn1OYY0OB-xUx4hHOcnfQ/Sheet2"
+    );
+
+    const dataStatus =
+      await resStatus.json();
+
+    // ====================
+    // DATA PELAJARAN
+    // ====================
+
+    const resMapel = await fetch(
+      "https://opensheet.elk.sh/1DKNM74sV4SAVkOPmeSfCvQWmUxY8RDVrPmW6yuyi6Ww/Sheet1"
+    );
+
+    const dataMapel =
+      await resMapel.json();
+    // ====================
+    // DATA JUMLAH PAKET
+    // ====================
+
+    const resPaket = await fetch(
+      "https://opensheet.elk.sh/1XzRacvaoHIZsvEqvoUhm4Knm97wEKIvBjjfl4vihxTI/Sheet4"
+    );
+
+const dataPaket =
+  await resPaket.json();
+  console.log("dataPaket", dataPaket);
+    // ====================
+    // LOOP TOMBOL
+    // ====================
+
+    document
+      .querySelectorAll(".tombol-3d")
+      .forEach(btn => {
+
+        const namaPaket =
+          btn.textContent
+            .replace("OK", "")
+            .replace("BELI PAKET", "")
+            .trim();
+
+        // ====================
+        // STATUS
+        // ====================
+
+        const rowsPaket =
+  dataStatus.filter(r =>
+
+    (r.Email || "")
+      .trim()
+      .toLowerCase() === email
+
+    &&
+
+    (r.Paket || "")
+      .trim()
+      .toUpperCase()
+
+    ===
+
+    namaPaket.toUpperCase()
+
+  );
+
+const statusRow =
+  rowsPaket.sort(
+    (a,b) =>
+      new Date(b.Tanggal) -
+      new Date(a.Tanggal)
+  )[0];
+        const status =
+  !email
+    ? "LOGIN"
+    : (
+        statusRow &&
+        (statusRow.Keaktifan || "")
+          .trim()
+          .toUpperCase() === "AKTIF" &&
+        (statusRow.Permission || "")
+          .trim()
+          .toUpperCase() === "OK"
+      )
+        ? "OK"
+        : "BELI PAKET";
+
+        // ====================
+        // HARGA
+        // ====================
+
+        const hargaRow =
+          dataHarga.find(r =>
+
+            (Object.values(r)[1] || "")
+              .toString()
+              .trim()
+              .toUpperCase()
+
+            ===
+
+            namaPaket.toUpperCase()
+
+          );
+
+        const starter =
+          hargaRow
+            ? Object.values(hargaRow)[3]
+            : "-";
+
+        const premium =
+          hargaRow
+            ? Object.values(hargaRow)[4]
+            : "-";
+
+        const ultimate =
+          hargaRow
+            ? Object.values(hargaRow)[5]
+            : "-";
+
+        // ====================
+        // JUMLAH PELAJARAN
+        // ====================
+
+        const jumlahPelajaran =
+          dataMapel.filter(r =>
+
+            (r["Folder Level 3"] || "")
+              .trim()
+              .toUpperCase()
+
+            ===
+
+            namaPaket.toUpperCase()
+
+            &&
+
+            (r["Nama File"] || "")
+              .trim() !== ""
+
+          ).length;
+          // ====================
+// JUMLAH PAKET
+// ====================
+
+const rowPaket =
+  dataPaket.find(r =>
+
+    (Object.values(r)[0] || "")
+      .toString()
+      .trim()
+      .toUpperCase()
+
+    ===
+
+    namaPaket.toUpperCase()
+
+  );
+
+const jumlahPaket =
+  rowPaket
+    ? Number(
+        Object.values(rowPaket)[1] || 0
+      )
+    : 0;
+        // ====================
+        // TAMPILKAN
+        // ====================
+        btn.dataset.status = status;
+        btn.dataset.paket = namaPaket;
+        btn.innerHTML = `
+
+          <div class="judul-kelas">
+
+             🎓 ${namaPaket}
+
+            
+
+          </div>
+
+          <div class="harga-kelas">
+
+                    <div>
+          📚 ${jumlahPelajaran} Pelajaran
+        </div>
+
+        <div>
+          📦 ${jumlahPaket} Paket
+        </div>
+
+            <div>
+              Starter :
+              ${starter}
+            </div>
+
+            <div>
+              Premium :
+              ${premium}
+            </div>
+
+            <div>
+              Ultimate :
+              ${ultimate}
+            </div>
+
+          </div>
+      <div
+        style="
+          margin-top:10px;
+          text-align:center;
+        "
+      >
+        <span
+    style="
+      padding:6px 12px;
+      border-radius:999px;
+      background:${
+  status==="OK"
+    ? "#00c853"
+    : status==="LOGIN"
+      ? "#2196f3"
+      : "#ff5252"
+};
+      color:white;
+      font-weight:bold;
+      font-size:12px;
+      box-shadow:
+        0 3px 10px rgba(0,0,0,.3);
+    "
+  >
+    ${
+  status === "OK"
+    ? "✅ AKTIF"
+    : status === "LOGIN"
+      ? "🔐 LOGIN"
+      : "🛒 BELI PAKET"
+}
+  </span>
+        `;
+
+      });
+
+  } catch(err) {
+
+    console.error(
+      "Gagal memuat info paket",
+      err
+    );
+
+  }
+
+}
