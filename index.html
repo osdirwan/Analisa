@@ -2,6 +2,8 @@
 
 <html lang="id">
 <head>
+<style>#score,#scoreEl,#score-box{display:none!important;}</style>
+<style>#timer,#timer-box{display:flex;align-items:center;justify-content:center;height:100vh;}</style>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Kuis Interaktif</title>
@@ -108,61 +110,636 @@ document.addEventListener("DOMContentLoaded", () => {
 <body>
 <!-- Halaman Beranda -->
 <header style="background-color: #4a90e2; color: white; padding: 20px; display: flex; align-items: center;">
-<div style="font-weight: bold; font-size: 24px;">BIMBEL ANTIREMED</div>
-<nav style="margin-left: 20px;">
-<ul style="list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; color: white;">
-<li class="dropdown">
-<a href="#">Akun</a>
-<ul class="dropdown-menu">
-<li><a href="#">Log in</a></li>
-<li><a href="#">Sign Up</a></li>
-</ul>
+  <div style="font-weight: bold; font-size: 24px;">BIMBEL ANTIREMED</div>
+
+  <nav style="margin-left: 20px;">
+    <ul style="list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; color: white;">
+
+      <!-- MENU AKUN -->
+      <li class="dropdown">
+        <a href="#">Akun</a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Sign Up</a></li>
+          <li><a href="#">Log in</a></li>
+        </ul>
+      </li>
+
+      <!-- MENU PEMBELIAN -->
+      <li class="dropdown">
+        <a href="#">Pembelian</a>
+        <ul class="dropdown-menu">
+<li>
+  <a id="menu-daftar-paket"
+     class="menu-link"
+     data-target="daftar-paket"
+     href="#">
+     Daftar Paket
+  </a>
 </li>
-<li class="dropdown">
-<a href="#">Belajar</a>
-<ul class="dropdown-menu">
-<li><a class="menu-link" data-target="belajar-sd" href="#">Paket SD</a></li>
-<li><a class="menu-link" data-target="belajar-smp" href="#">Paket SMP</a></li>
-<li><a class="menu-link" data-target="belajar-sma" href="#">Paket SMA</a></li>
-</ul>
-</li>
-<li class="dropdown">
-<a href="#">Tryout</a>
-<ul class="dropdown-menu">
-<li><a class="menu-link" data-target="tryout-sd" href="#">Tryout SD</a></li>
-<li><a class="menu-link" data-target="tryout-smp" href="#">Tryout SMP</a></li>
-<li><a class="menu-link" data-target="tryout-sma" href="#">Tryout SMA</a></li>
-</ul>
-</li>
-<li class="dropdown">
-  <a href="#">Target</a>
-  <ul class="dropdown-menu">
-    <li><a class="menu-link" data-target="data-prestasi" href="#">Data Prestasi</a></li>
-    <li><a class="menu-link" data-target="data-pembayaran" href="#">Data Pembayaran</a></li>
+        </ul>
+      </li>
+
+      <!-- MENU BELAJAR -->
+      <li class="dropdown">
+  <a href="#">Belajar</a>
+
+  <ul
+    class="dropdown-menu"
+    id="menu-belajar-dinamis"
+  >
+    <li>
+      <a href="#">
+        Memuat...
+      </a>
+    </li>
   </ul>
 </li>
 
-<li class="dropdown">
-<a href="#">Beli Paket</a>
-<ul class="dropdown-menu">
-<li><a class="menu-link" data-target="beli-dki-qris" href="#">Bank DKI - QRIS</a></li>
-<li><a class="menu-link" data-target="beli-dki-transfer" href="#">Bank DKI - Transfer</a></li>
-<li><a class="menu-link" data-target="beli-bri-qris" href="#">Bank BRI - QRIS</a></li>
-<li><a class="menu-link" data-target="beli-bri-transfer" href="#">Bank BRI - Transfer</a></li>
-<li><a class="menu-link" data-target="beli-bca-qris" href="#">Bank BCA - QRIS</a></li>
-<li><a class="menu-link" data-target="beli-bca-transfer" href="#">Bank BCA - Transfer</a></li>
-<li><a class="menu-link" data-target="beli-bni-qris" href="#">Bank BNI - QRIS</a></li>
-<li><a class="menu-link" data-target="beli-bni-transfer" href="#">Bank BNI - Transfer</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</header><div class="halaman" id="beranda">
+      
 
-<main style="padding: 20px;">
-<h1>Selamat datang di Bimbel Antiremed!</h1>
-<p>Silakan pilih menu di atas untuk mulai belajar atau membeli paket.</p>
-</main>
+      <!-- MENU TARGET -->
+      <li class="dropdown">
+        <a href="#">Pencapaian</a>
+        <ul class="dropdown-menu">
+          <li><a class="menu-link" data-target="data-prestasi" href="#">Data Prestasi</a></li>
+          <li><a class="menu-link" data-target="data-pembayaran" href="#">Data Pembayaran</a></li>
+        </ul>
+      </li>
+
+      
+
+    </ul>
+  </nav>
+</header>
+
+<div class="halaman" id="beranda">
+  <main style="padding: 20px;">
+    <h1>Selamat datang di Bimbel Antiremed!</h1>
+    <p>Silakan pilih menu di atas untuk mulai belajar atau membeli paket.</p>
+  </main>
+</div>
+
+<!-- TEMPEL DI SINI -->
+<!-- HALAMAN DAFTAR PAKET -->
+<div class="halaman-konten" id="daftar-paket" style="display:none; padding:30px;">
+
+  <h2 style="margin-bottom:25px; color:#333;">
+    📦 Daftar Paket
+  </h2>
+<div class="info-paket">
+
+  <div>
+    <strong>Starter</strong> :
+    Berlaku 7 hari
+  </div>
+
+  <div>
+    <strong>Premium</strong> :
+    Berlaku 30 hari
+  </div>
+
+  <div>
+    <strong>Ultimate</strong> :
+    Berlaku 360 hari
+  </div>
+
+</div>
+
+  <div id="container-daftar-paket"
+       style="
+         display:flex;
+         flex-wrap:wrap;
+         gap:20px;
+       ">
+  </div>
+<div id="total-biaya-box">
+
+  <div class="total-label">
+    TOTAL BIAYA
+  </div>
+
+  <div id="total-biaya">
+    Rp 0
+  </div>
+
+  <button
+    id="btn-konfirmasi-paket"
+    class="btn-3d btn-3d-blue"
+  >
+  Lanjut
+
+</div>
+
+<!-- SCRIPT TEMPEL DI SINI -->
+<script>
+  function updateTotalBiaya() {
+
+  let total = 0;
+
+  document
+    .querySelectorAll(
+      '.subfolder-radio input[type="radio"]:checked'
+    )
+
+    .forEach(radio => {
+
+      const hargaEl =
+        radio.parentElement.querySelector(
+          ".radio-price"
+        );
+
+      if (!hargaEl) return;
+
+      // ambil angka
+      const angka =
+        hargaEl.textContent
+          .replace(/[^\d]/g, "");
+
+      total +=
+        parseInt(angka || 0);
+
+    });
+
+  document.getElementById(
+    "total-biaya"
+  ).textContent =
+    "Rp " +
+    total.toLocaleString("id-ID");
+
+}
+async function loadDaftarPaket() {
+
+  const spreadsheetId =
+    "1Xsq4Gl2MhJ1GhraiJ_r4Zc2_d40NHp1yQY0PjMmWcas";
+
+  const sheetName = "Sheet1";
+
+  const url =
+    `https://opensheet.elk.sh/${spreadsheetId}/${encodeURIComponent(sheetName)}`;
+
+  console.log("LOAD URL:", url);
+
+  try {
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    console.log("DATA:", data);
+
+    const container =
+      document.getElementById("container-daftar-paket");
+
+    container.innerHTML = "";
+
+    if (!Array.isArray(data) || data.length === 0) {
+
+      container.innerHTML =
+        "<p>Data paket kosong.</p>";
+
+      return;
+    }
+
+    data
+  .sort((a, b) => {
+
+    const colA =
+      a[Object.keys(a)[0]]
+      ?.toString()
+      .toLowerCase() || "";
+
+    const colB =
+      b[Object.keys(b)[0]]
+      ?.toString()
+      .toLowerCase() || "";
+
+    return colA.localeCompare(
+      colB,
+      undefined,
+      {
+        numeric: true,
+        sensitivity: "base"
+      }
+    );
+
+  })
+
+ .forEach(async (row, index) => {
+
+  const firstColumn =
+    Object.keys(row)[0];
+
+  const label =
+    row[firstColumn];
+
+  if (!label) return;
+
+  // CARD
+  const card =
+    document.createElement("div");
+
+  card.className =
+    "card-paket";
+
+  // TOMBOL PAKET
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "btn-paket";
+
+  button.textContent =
+    label;
+
+  // CONTAINER SUBFOLDER
+  const subfolderBox =
+    document.createElement("div");
+
+  subfolderBox.className =
+    "subfolder-list";
+
+  subfolderBox.innerHTML =
+    "Memuat subfolder...";
+
+  // EVENT TOMBOL
+  button.addEventListener("click", () => {
+
+    console.log(
+      "Paket:",
+      label
+    );
+
+  });
+
+  // LOAD SUBFOLDER
+  try {
+
+    const subfolderUrl =
+      "https://opensheet.elk.sh/1kAxPCGnlXmoz2U8RjoZ1pZCNOHXsWroBte9nVkZMwvg/Sheet1";
+
+    const response =
+      await fetch(subfolderUrl);
+
+    const subfolderData =
+      await response.json();
+
+    const hasil =
+      subfolderData.filter(item => {
+
+        const kolom1 =
+          Object.values(item)[0]
+          ?.toString()
+          .trim();
+
+        return kolom1 === label;
+
+      });
+
+    if (hasil.length === 0) {
+
+      subfolderBox.innerHTML =
+        "<div class='subfolder-item'>Tidak ada subfolder</div>";
+
+    } else {
+
+      subfolderBox.innerHTML = "";
+
+      hasil
+
+        .sort((a, b) => {
+
+          const subA =
+            Object.values(a)[1]
+            ?.toString()
+            .toLowerCase() || "";
+
+          const subB =
+            Object.values(b)[1]
+            ?.toString()
+            .toLowerCase() || "";
+
+          return subA.localeCompare(
+            subB,
+            "id",
+            {
+              numeric:true,
+              sensitivity:"base"
+            }
+          );
+
+        })
+
+        .forEach(item => {
+
+          const namaSubfolder =
+            Object.values(item)[1];
+
+          if (!namaSubfolder) return;
+
+          // ITEM
+          const div =
+            document.createElement("div");
+
+          div.className =
+            "subfolder-item";
+
+          // NAMA
+          const nama =
+            document.createElement("div");
+
+          nama.className =
+            "subfolder-nama";
+
+          nama.textContent =
+            namaSubfolder;
+
+          // RADIO GROUP
+          const radioGroup =
+            document.createElement("div");
+
+          radioGroup.className =
+            "subfolder-radio";
+
+          const radioName =
+            `subfolder-${index}-${namaSubfolder}`;
+
+          const hargaTryout =
+  Object.values(item)[3] || "-";
+
+const hargaPremium =
+  Object.values(item)[4] || "-";
+
+const hargaTahunan =
+  Object.values(item)[5] || "-";
+
+radioGroup.innerHTML = `
+
+  <label class="radio-card">
+
+    <input
+      type="radio"
+      name="${radioName}"
+      value="Tryout"
+      
+    >
+
+    <div class="radio-title">
+      Starter
+    </div>
+
+    <div class="radio-price">
+      ${hargaTryout}
+    </div>
+
+  </label>
+
+  <label class="radio-card">
+
+    <input
+      type="radio"
+      name="${radioName}"
+      value="Premium"
+    >
+
+    <div class="radio-title">
+      Premium
+    </div>
+
+    <div class="radio-price">
+      ${hargaPremium}
+    </div>
+
+  </label>
+
+  <label class="radio-card">
+
+    <input
+      type="radio"
+      name="${radioName}"
+      value="Tahunan"
+    >
+
+    <div class="radio-title">
+      Ultimate
+    </div>
+
+    <div class="radio-price">
+      ${hargaTahunan}
+    </div>
+
+  </label>
+
+`;
+
+          // EVENT
+          div.addEventListener("click", () => {
+
+            const selected =
+              radioGroup.querySelector(
+                `input[name="${radioName}"]:checked`
+              );
+
+            const jenis =
+              selected
+                ? selected.value
+                : "";
+
+            console.log(
+              "Paket:",
+              label,
+              "Subfolder:",
+              namaSubfolder,
+              "Jenis:",
+              jenis
+            );
+
+          });
+          
+          // RADIO BISA DIBATALKAN
+const radios =
+  radioGroup.querySelectorAll(
+    `input[name="${radioName}"]`
+  );
+
+radios.forEach(radio => {
+
+  radio.dataset.wasChecked = "false";
+
+  radio.addEventListener(
+    "mousedown",
+    function () {
+
+      this.dataset.wasChecked =
+        this.checked;
+
+    }
+  );
+
+  radio.addEventListener(
+  "click",
+  function () {
+
+    if (
+      this.dataset.wasChecked === "true"
+    ) {
+
+      this.checked = false;
+
+    }
+
+    setTimeout(() => {
+      updateTotalBiaya();
+    }, 10);
+
+  }
+);
+
+});
+          div.appendChild(nama);
+
+          div.appendChild(radioGroup);
+
+          subfolderBox.appendChild(div);
+
+        });
+
+    }
+
+  } catch(err) {
+
+    console.error(err);
+
+    subfolderBox.innerHTML =
+      "<div class='subfolder-item'>Gagal memuat subfolder</div>";
+
+  }
+
+  // APPEND
+  // BODY
+const body =
+  document.createElement("div");
+
+body.className =
+  "card-body";
+
+body.appendChild(subfolderBox);
+
+// APPEND
+card.appendChild(button);
+
+card.appendChild(body);
+
+container.appendChild(card);
+
+});
+
+
+
+
+
+  } catch (err) {
+
+    console.error(err);
+
+    document.getElementById(
+      "container-daftar-paket"
+    ).innerHTML =
+      "<p>Gagal mengambil data spreadsheet.</p>";
+  }
+}
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadDaftarPaket
+);
+</script>
+<!-- SCRIPT LOAD PAKET -->
+<script>
+  // script paket
+</script>
+
+<!-- SCRIPT LOGIN DAFTAR PAKET -->
+<script>
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    const menuDaftarPaket =
+      document.getElementById(
+        "menu-daftar-paket"
+      );
+
+    if(!menuDaftarPaket) return;
+
+    menuDaftarPaket.addEventListener(
+      "click",
+      function(e){
+
+        if(!window.loggedInEmail){
+
+          e.preventDefault();
+
+          alert(
+            "⚠️ Silakan login terlebih dahulu"
+          );
+
+          document
+            .querySelectorAll(
+              ".halaman, .halaman-konten, #identity-form"
+            )
+            .forEach(el=>{
+              el.style.display = "none";
+            });
+
+          const loginForm =
+            document.getElementById(
+              "login-page"
+            );
+
+          if(loginForm){
+
+            loginForm.style.display =
+              "block";
+
+          }
+
+          return false;
+        }
+
+        e.preventDefault();
+
+        document
+          .querySelectorAll(
+            ".halaman, .halaman-konten"
+          )
+          .forEach(el=>{
+            el.style.display = "none";
+          });
+
+        document
+          .getElementById(
+            "daftar-paket"
+          )
+          .style.display = "block";
+
+      }
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
+</body>
+</html>
+
+  <!-- CONTAINER TOMBOL -->
+<div id="container-daftar-paket" class="grid-paket">
+</div>
+
 </div>
 <!-- Halaman Konten Dinamis -->
 <div class="halaman-konten" id="belajar-sd">
@@ -419,7 +996,7 @@ document.querySelectorAll(".menu-link").forEach(link => {
 
         e.preventDefault();
 
-        alert("Kamu belum login");
+        alert("Silakan login terlebih dahulu");
 
         return;
       }
@@ -440,16 +1017,1622 @@ document.querySelectorAll(".menu-link").forEach(link => {
 
 <!-- Halaman Login -->
 <div class="halaman-konten" id="login-page">
-<form class="styled-login-form" id="login-form">
+<form
+  class="styled-login-form"
+  id="login-form"
+  novalidate
+>
 <h2>Login</h2>
-<input id="login-email" placeholder="Email" required="" type="email"/><br/>
-<input id="login-password" placeholder="Password" required="" type="password"/><br/>
+<input
+  id="login-email"
+  placeholder="Email"
+  type="email"
+/>
+
+<input
+  id="login-password"
+  placeholder="Password"
+  type="password"
+/>
 <button class="main-button" type="submit">Log In</button>
-<button class="main-button" id="login-kembali" type="button">Kembali</button>
+<button
+  class="main-button"
+  id="login-kembali"
+  type="button"
+  onclick="
+    document.querySelectorAll('.halaman,.halaman-konten')
+      .forEach(el=>el.style.display='none');
+    document.getElementById('beranda')
+      .style.display='block';
+  "
+>
+  Kembali
+</button>
 </form>
+</div>
+<!-- CSS TOMBOL DIMENSI 3 -->
+<style>
+
+  /* GRID 5 KOLOM */
+  .grid-paket{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:20px;
+    width:100%;
+  }
+/* INFO PAKET */
+.info-paket{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:14px;
+
+  margin-bottom:25px;
+
+  padding:14px 18px;
+
+  background:#f5f7fb;
+
+  border-radius:14px;
+
+  border:1px solid #d7e3f5;
+}
+
+.info-paket div{
+
+  font-size:15px;
+
+  color:#333;
+
+  font-weight:500;
+}
+  /* RESPONSIVE */
+  @media(max-width:1200px){
+    .grid-paket{
+      grid-template-columns:repeat(4, 1fr);
+    }
+  }
+
+  @media(max-width:900px){
+    .grid-paket{
+      grid-template-columns:repeat(3, 1fr);
+    }
+  }
+
+  @media(max-width:700px){
+    .grid-paket{
+      grid-template-columns:repeat(2, 1fr);
+    }
+  }
+
+  @media(max-width:500px){
+    .grid-paket{
+      grid-template-columns:1fr;
+    }
+  }
+
+  /* TOMBOL */
+  .btn-paket{
+
+    width:30%;
+    height:90px;
+
+    background:
+      linear-gradient(145deg,#5aa9ff,#2f7fe0);
+
+    color:white;
+
+    border:none;
+
+    border-radius:18px;
+
+    font-size:18px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    padding:10px;
+
+    text-align:center;
+
+    box-shadow:
+      0 8px 0 #1f5fb5,
+      0 12px 20px rgba(0,0,0,0.25);
+
+    transition:all 0.15s ease;
+  }
+
+  .btn-paket:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+      0 10px 0 #1f5fb5,
+      0 15px 25px rgba(0,0,0,0.30);
+  }
+
+  .btn-paket:active{
+
+    transform:translateY(6px);
+
+    box-shadow:
+      0 2px 0 #1f5fb5,
+      0 4px 10px rgba(0,0,0,0.20);
+  }
+/* CARD */
+/* CARD */
+.card-paket{
+
+  width:100%;
+
+  background:white;
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+  border:1px solid #dcdcdc;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* TOMBOL */
+.btn-paket{
+
+  width:100%;
+
+  border-radius:0;
+
+  margin:0;
+
+  box-shadow:none;
+
+  height:80px;
+
+  font-size:20px;
+}
+
+/* LIST */
+.subfolder-list{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+}
+
+/* ITEM */
+.subfolder-item{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:20px;
+
+  background:#f5f5f5;
+
+  border:1px solid #ddd;
+
+  border-radius:12px;
+
+  padding:12px 14px;
+}
+
+/* NAMA */
+.subfolder-nama{
+
+  flex:1;
+
+  font-size:15px;
+
+  font-weight:700;
+}
+
+/* RADIO */
+.subfolder-radio{
+
+  display:flex;
+
+  gap:8px;
+
+  flex-wrap:wrap;
+}
+
+
+/* MOBILE */
+@media(max-width:700px){
+
+  .subfolder-item{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+  }
+
+  .subfolder-radio{
+
+    width:100%;
+  }
+
+}
+
+/* TOMBOL FULL */
+.btn-paket{
+
+  width:100%;
+
+  border-radius:0;
+
+  margin:0;
+
+  box-shadow:none;
+
+  height:80px;
+
+  font-size:20px;
+}
+/* BODY CARD */
+.card-body{
+
+  padding:14px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  background:#fafafa;
+}
+/* ===================================
+TOMBOL 3 DIMENSI MODERN
+=================================== */
+
+.btn-3d{
+
+  padding:14px 26px;
+
+  border:none;
+
+  border-radius:16px;
+
+  font-size:17px;
+
+  font-weight:700;
+
+  color:white;
+
+  cursor:pointer;
+
+  transition:all 0.15s ease;
+
+  transform:translateY(0);
+
+}
+
+/* HIJAU */
+.btn-3d-green{
+
+  background:
+    linear-gradient(
+      145deg,
+      #4fd96b,
+      #1fa93f
+    );
+
+  box-shadow:
+    0 8px 0 #168530,
+    0 12px 20px rgba(0,0,0,0.25);
+
+}
+
+/* ABU */
+.btn-3d-gray{
+
+  background:
+    linear-gradient(
+      145deg,
+      #b5b5b5,
+      #8a8a8a
+    );
+
+  box-shadow:
+    0 8px 0 #666,
+    0 12px 20px rgba(0,0,0,0.25);
+
+}
+
+/* BIRU */
+.btn-3d-blue{
+
+  background:
+    linear-gradient(
+      145deg,
+      #59a9ff,
+      #2d7be5
+    );
+
+  box-shadow:
+    0 8px 0 #1f5fb5,
+    0 12px 20px rgba(0,0,0,0.25);
+
+}
+
+.btn-3d:hover{
+
+  transform:translateY(-2px);
+
+}
+
+.btn-3d:active{
+
+  transform:translateY(6px);
+
+}
+
+.btn-3d-green:active{
+
+  box-shadow:
+    0 2px 0 #168530,
+    0 4px 10px rgba(0,0,0,0.2);
+
+}
+
+.btn-3d-gray:active{
+
+  box-shadow:
+    0 2px 0 #666,
+    0 4px 10px rgba(0,0,0,0.2);
+
+}
+
+.btn-3d-blue:active{
+
+  box-shadow:
+    0 2px 0 #1f5fb5,
+    0 4px 10px rgba(0,0,0,0.2);
+
+}
+</style>
+<script>
+async function loadDaftarPaket() {
+
+  const spreadsheetId = "1Xsq4Gl2MhJ1GhraiJ_r4Zc2_d40NHp1yQY0PjMmWcas";
+
+  const sheetName = "Sheet1";
+
+  const url =
+    `https://opensheet.elk.sh/${spreadsheetId}/${Sheet1}`;
+
+  try {
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    const container =
+      document.getElementById("container-daftar-paket");
+
+    container.innerHTML = "";
+
+    data.forEach(row => {
+
+      const label = Object.values(row)[0];
+
+      if (!label) return;
+
+      const button = document.createElement("button");
+
+      button.className = "btn-paket";
+
+      button.textContent = label;
+
+      container.appendChild(button);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+}
+
+loadDaftarPaket();
+</script>
+<!-- HALAMAN KONFIRMASI PAKET -->
+<div
+  class="halaman-konten"
+  id="konfirmasi-paket-page"
+  style="display:none; padding:25px;"
+>
+
+  <h2>
+    🧾 Konfirmasi Paket
+  </h2>
+
+  <div id="list-konfirmasi-paket">
+
+  </div>
+
+  <div style="
+    margin-top:20px;
+    padding:16px;
+    background:#f5f5f5;
+    border-radius:12px;
+    font-size:20px;
+    font-weight:bold;
+  ">
+
+    Total Bayar :
+    <span id="konfirmasi-total-bayar">
+      Rp 0
+    </span>
+
+  </div>
+
+  <div style="
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  ">
+
+  <button
+    id="btn-kembali-paket"
+    class="btn-3d btn-3d-gray"
+      style="
+        padding:12px 20px;
+        border:none;
+        border-radius:10px;
+        background:#888;
+        color:white;
+        cursor:pointer;
+      "
+    >
+      ⬅️ Kembali
+    </button>
+
+    <button
+      id="btn-lanjut-metode"
+      class="btn-3d btn-3d-green"
+      style="
+        padding:12px 20px;
+        border:none;
+        border-radius:10px;
+        background:#28a745;
+        color:white;
+        cursor:pointer;
+      "
+    >
+      ✅ OK
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+// ===============================
+// TAMPILKAN HALAMAN DAFTAR PAKET
+// ===============================
+document
+  .getElementById(
+    "btn-konfirmasi-paket"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      const checkedRadios =
+        document.querySelectorAll(
+          '.subfolder-radio input[type="radio"]:checked'
+        );
+
+      if (checkedRadios.length === 0) {
+
+        alert(
+          "⚠️ Pilih paket terlebih dahulu"
+        );
+
+        return;
+      }
+
+      const container =
+        document.getElementById(
+          "list-konfirmasi-paket"
+        );
+
+      const totalEl =
+        document.getElementById(
+          "konfirmasi-total-bayar"
+        );
+
+      container.innerHTML = "";
+
+      let total = 0;
+
+      checkedRadios.forEach(radio => {
+
+        const card =
+          radio.closest(
+            ".subfolder-item"
+          );
+
+        const namaPaket =
+          card.querySelector(
+            ".subfolder-nama"
+          ).textContent;
+
+        const jenis =
+          radio.parentElement.querySelector(
+            ".radio-title"
+          ).textContent;
+
+        const hargaText =
+          radio.parentElement.querySelector(
+            ".radio-price"
+          ).textContent;
+
+        const harga =
+          parseInt(
+            hargaText.replace(/[^\d]/g, "")
+          ) || 0;
+
+        total += harga;
+
+        const div =
+          document.createElement("div");
+
+        div.style = `
+          background:white;
+          border:1px solid #ddd;
+          border-radius:12px;
+          padding:14px;
+          margin-bottom:12px;
+        `;
+
+        div.innerHTML = `
+
+          <div style="
+            font-size:16px;
+            font-weight:bold;
+          ">
+            ${namaPaket}
+          </div>
+
+          <div style="
+            margin-top:8px;
+          ">
+            Jenis :
+            <strong>${jenis}</strong>
+          </div>
+
+          <div style="
+            margin-top:8px;
+            color:green;
+            font-weight:bold;
+          ">
+            ${hargaText}
+          </div>
+
+        `;
+
+        container.appendChild(div);
+
+      });
+
+      totalEl.textContent =
+        "Rp " +
+        total.toLocaleString(
+          "id-ID"
+        );
+
+      // pindah halaman
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document
+        .getElementById(
+          "konfirmasi-paket-page"
+        )
+        .style.display = "block";
+
+    }
+  );
+
+// ===============================
+// KEMBALI KE DAFTAR PAKET
+// ===============================
+document
+  .getElementById(
+    "btn-kembali-paket"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document
+        .getElementById(
+          "daftar-paket"
+        )
+        .style.display = "block";
+
+    }
+  );
+
+// ===============================
+// LANJUT KE METODE BAYAR
+// ===============================
+document
+  .getElementById(
+    "btn-lanjut-metode"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document
+        .getElementById(
+          "metode-bayar-page"
+        )
+        .style.display = "block";
+
+    }
+  );
+
+</script>
+<div
+
+  class="halaman-konten"
+  id="metode-bayar-page"
+  style="display:none;"
+>
+
+  <h2 class="judul-bayar">
+  Pilih Metode Pembayaran
+</h2>
+
+<div class="metode-grid">
+
+  <label class="metode-item">
+    <input
+      type="radio"
+      name="metodePembayaran"
+      value="QRIS"
+      checked
+    >
+    QRIS
+  </label>
+
+  <label class="metode-item">
+    <input
+      type="radio"
+      name="metodePembayaran"
+      value="DANA"
+    >
+    DANA
+  </label>
+
+  <label class="metode-item">
+    <input
+      type="radio"
+      name="metodePembayaran"
+      value="GOPAY"
+    >
+    GOPAY
+  </label>
+
+  <label class="metode-item">
+    <input
+      type="radio"
+      name="metodePembayaran"
+      value="SHOPEEPAY"
+    >
+    SHOPEEPAY
+  </label>
+
+  <label class="metode-item">
+    <input
+      type="radio"
+      name="metodePembayaran"
+      value="TRANSFER"
+    >
+    TRANSFER
+  </label>
+
+</div>
+
+  <button
+  class="kembali-btn btn-3d btn-3d-gray"
+  onclick="
+    document
+      .querySelectorAll(
+        '.halaman, .halaman-konten'
+      )
+      .forEach(
+        el => el.style.display='none'
+      );
+
+    document.getElementById(
+      'konfirmasi-paket-page'
+    ).style.display='block';
+  "
+>
+  KEMBALI
+</button>
+
+</div>
+
+ <!-- HALAMAN KONFIRMASI PEMBAYARAN -->
+<div
+  class="halaman-konten"
+  id="konfirmasi-pembayaran-page"
+  style="
+    display:none;
+    padding:25px;
+  "
+>
+
+  <h2>
+    📤 Konfirmasi Pembayaran
+  </h2>
+
+  <div style="
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    border:1px solid #ddd;
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.08);
+    margin-top:20px;
+  ">
+
+    <!-- TANGGAL -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Tanggal
+      </div>
+
+      <input
+        type="text"
+        id="form-tanggal"
+        readonly
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+        "
+      >
+
+    </div>
+
+    <!-- EMAIL -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Email
+      </div>
+
+      <input
+        type="text"
+        id="form-email"
+        readonly
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+        "
+      >
+
+    </div>
+
+    <!-- NAMA -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Nama
+      </div>
+
+      <input
+        type="text"
+        id="form-nama"
+        readonly
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+        "
+      >
+
+    </div>
+
+    <!-- PAKET -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Paket
+      </div>
+
+      <textarea
+        id="form-paket"
+        readonly
+        style="
+          width:100%;
+          min-height:120px;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+        "
+      ></textarea>
+
+    </div>
+
+    <!-- JENIS -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Jenis Paket
+      </div>
+
+      <input
+        type="text"
+        id="form-jenis"
+        readonly
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+        "
+      >
+
+    </div>
+
+    <!-- TOTAL -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Total Bayar
+      </div>
+
+      <input
+        type="text"
+        id="form-total"
+        readonly
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+          font-weight:bold;
+          color:#1565c0;
+        "
+      >
+
+    </div>
+
+    <!-- METODE -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Metode Bayar
+      </div>
+
+      <input
+        type="text"
+        id="form-metode"
+        readonly
+        style="
+          width:100%;
+          padding:12px;
+          border-radius:10px;
+          border:1px solid #ccc;
+        "
+      >
+
+    </div>
+
+    <!-- UPLOAD -->
+    <div style="margin-bottom:18px;">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:6px;
+      ">
+        Upload Bukti Pembayaran
+      </div>
+
+      <input
+        type="file"
+        id="form-bukti"
+        accept="image/*"
+        style="
+          width:100%;
+          padding:10px;
+        "
+      >
+
+    </div>
+
+  </div>
+
+  <div style="
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  ">
+
+    <button
+      id="btn-kembali-konfirmasi-bayar"
+      class="btn-3d btn-3d-gray"
+    >
+      ⬅️ Kembali
+    </button>
+
+    <button
+      id="btn-kirim-konfirmasi"
+      class="btn-3d btn-3d-green"
+    >
+      ✅ Kirim Konfirmasi
+    </button>
+
+  </div>
+
+</div>
+<!-- HALAMAN DETAIL PEMBAYARAN -->
+<div
+
+  class="halaman-konten"
+  id="detail-pembayaran-page"
+  style="
+    display:none;
+    padding:25px;
+  "
+>
+
+  <h2>
+    💳 Detail Pembayaran
+  </h2>
+
+  <div style="
+    background:white;
+    border-radius:18px;
+    padding:22px;
+    border:1px solid #ddd;
+    box-shadow:
+      0 4px 12px rgba(0,0,0,0.08);
+    margin-top:20px;
+  ">
+
+    <div style="
+      font-size:18px;
+      font-weight:bold;
+      margin-bottom:18px;
+    ">
+      Metode :
+      <span id="detail-metode-bayar">
+        -
+      </span>
+    </div>
+
+    <div style="
+      margin-bottom:12px;
+      font-size:16px;
+    ">
+      Nama Bank :
+      <strong>
+        BANK DKI
+      </strong>
+    </div>
+
+    <div style="
+      margin-bottom:12px;
+      font-size:16px;
+    ">
+      Nomor Rekening :
+    </div>
+
+    <div style="
+      background:#f5f5f5;
+      padding:18px;
+      border-radius:14px;
+      font-size:28px;
+      font-weight:bold;
+      letter-spacing:2px;
+      text-align:center;
+      margin-bottom:18px;
+    ">
+      1234567890
+    </div>
+
+    <div style="
+      margin-bottom:12px;
+      font-size:16px;
+    ">
+      Atas Nama :
+      <strong>
+        BIMBEL ANTIREMED
+      </strong>
+    </div>
+
+    <div style="
+      margin-top:20px;
+      padding:16px;
+      background:#eef7ff;
+      border-radius:12px;
+      border:1px solid #cfe4ff;
+    ">
+
+      <div style="
+        font-weight:bold;
+        margin-bottom:8px;
+      ">
+        Total Pembayaran
+      </div>
+
+      <div
+        id="detail-total-bayar"
+        style="
+          font-size:30px;
+          color:#1565c0;
+          font-weight:bold;
+        "
+      >
+        Rp 0
+      </div>
+
+    </div>
+
+    <div style="
+      margin-top:20px;
+      line-height:1.8;
+      color:#444;
+    ">
+
+      <strong>
+        Instruksi Pembayaran:
+      </strong>
+
+      <ol style="
+        padding-left:20px;
+      ">
+        <li>
+          Transfer sesuai total pembayaran
+        </li>
+
+        <li>
+          Simpan bukti transfer
+        </li>
+
+        <li>
+          Klik tombol Saya Sudah Bayar
+        </li>
+
+        <li>
+          Admin akan memverifikasi pembayaran
+        </li>
+      </ol>
+
+    </div>
+
+  </div>
+
+  <div style="
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  ">
+
+    <button
+      id="btn-kembali-metode"
+      class="btn-3d btn-3d-gray"
+    >
+      ⬅️ Kembali
+    </button>
+
+    <button
+      id="btn-sudah-bayar"
+      class="btn-3d btn-3d-green"
+    >
+      ✅ Saya Sudah Bayar
+    </button>
+
+  </div>
+<script>
+
+// ===============================
+// PILIH METODE PEMBAYARAN
+// ===============================
+document
+  .querySelectorAll(".metode-item")
+  .forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      function () {
+
+        const metode =
+          this.textContent.trim();
+
+        // ambil total
+        const total =
+          document.getElementById(
+            "konfirmasi-total-bayar"
+          ).textContent;
+
+        // tampilkan metode
+        document.getElementById(
+          "detail-metode-bayar"
+        ).textContent =
+          metode;
+
+        // tampilkan total
+        document.getElementById(
+          "detail-total-bayar"
+        ).textContent =
+          total;
+
+        // pindah halaman
+        document
+          .querySelectorAll(
+            ".halaman, .halaman-konten"
+          )
+          .forEach(
+            el => el.style.display = "none"
+          );
+
+        document
+          .getElementById(
+            "detail-pembayaran-page"
+          )
+          .style.display = "block";
+
+      }
+    );
+
+});
+
+
+// ===============================
+// KEMBALI KE KONFIRMASI PAKET
+// ===============================
+document
+  .getElementById(
+    "btn-kembali-metode"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document
+        .getElementById(
+          "konfirmasi-paket-page"
+        )
+        .style.display = "block";
+
+    }
+  );
+
+// ===============================
+// HALAMAN DETAIL PEMBAYARAN
+// ===============================
+document
+  .getElementById(
+    "btn-sudah-bayar"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      // tanggal
+      const now =
+        new Date();
+
+      document.getElementById(
+        "form-tanggal"
+      ).value =
+        now.toLocaleString("id-ID");
+
+      // email
+      document.getElementById(
+        "form-email"
+      ).value =
+        window.loggedInEmail || "";
+
+      // nama
+      document.getElementById(
+        "form-nama"
+      ).value =
+        window.loggedInNama || "";
+
+      // metode bayar
+      document.getElementById(
+        "form-metode"
+      ).value =
+        document.getElementById(
+          "detail-metode-bayar"
+        ).textContent;
+
+      // total bayar
+      document.getElementById(
+        "form-total"
+      ).value =
+        document.getElementById(
+          "detail-total-bayar"
+        ).textContent;
+
+      // paket
+      const checkedRadios =
+        document.querySelectorAll(
+          '.subfolder-radio input[type="radio"]:checked'
+        );
+
+      const paketList = [];
+
+      const jenisList = [];
+
+      checkedRadios.forEach(radio => {
+
+        const item =
+          radio.closest(
+            ".subfolder-item"
+          );
+
+        const namaPaket =
+          item.querySelector(
+            ".subfolder-nama"
+          ).textContent.trim();
+
+        const radioBox =
+          radio.parentElement;
+
+        const jenis =
+          radioBox.querySelector(
+            ".radio-title"
+          ).textContent.trim();
+
+        paketList.push(
+          namaPaket
+        );
+
+        jenisList.push(
+          jenis
+        );
+
+      });
+
+      document.getElementById(
+        "form-paket"
+      ).value =
+        paketList.join("\n");
+
+      document.getElementById(
+        "form-jenis"
+      ).value =
+        jenisList.join(", ");
+
+      // pindah halaman
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document
+        .getElementById(
+          "konfirmasi-pembayaran-page"
+        )
+        .style.display = "block";
+
+    }
+  );
+
+
+// ===============================
+// KEMBALI
+// ===============================
+document
+  .getElementById(
+    "btn-kembali-konfirmasi-bayar"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      document
+        .querySelectorAll(
+          ".halaman, .halaman-konten"
+        )
+        .forEach(
+          el => el.style.display = "none"
+        );
+
+      document
+        .getElementById(
+          "detail-pembayaran-page"
+        )
+        .style.display = "block";
+
+    }
+  );
+const WEB_APP_URL =
+"https://script.google.com/macros/s/AKfycbxKyvCxR6rerlgUuJ6yioGsEt-oq17lLnNrt2DATUYgR28IPcvHOktuw5NKV3ZJ3ypl/exec";
+// ===============================
+// KIRIM KONFIRMASI
+// ===============================
+document
+  .getElementById(
+    "btn-kirim-konfirmasi"
+  )
+  .addEventListener(
+    "click",
+    function () {
+
+      const file =
+        document.getElementById(
+          "form-bukti"
+        ).files[0];
+
+      if (!file) {
+
+        alert(
+          "⚠️ Upload bukti pembayaran terlebih dahulu"
+        );
+
+        return;
+      }
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        async function(e){
+
+          const base64 =
+            e.target.result
+              .split(",")[1];
+
+          const data = {
+
+            email:
+              document.getElementById(
+                "form-email"
+              ).value,
+
+            nama:
+              document.getElementById(
+                "form-nama"
+              ).value,
+
+            paket:
+              document.getElementById(
+                "form-paket"
+              ).value,
+
+            jenis:
+              document.getElementById(
+                "form-jenis"
+              ).value,
+
+            metode:
+              document.getElementById(
+                "form-metode"
+              ).value,
+
+            total:
+              document.getElementById(
+                "form-total"
+              ).value,
+
+            harga:
+              window.hargaDipilih || "",
+
+            fileName:
+              file.name,
+
+            mimeType:
+              file.type,
+
+            fileData:
+              base64
+
+          };
+
+          try {
+  console.log(data.paket);
+            const response =
+  await fetch(
+    WEB_APP_URL,
+    {
+      method: "POST",
+      
+      body: JSON.stringify(data)
+    }
+  );
+
+
+
+            const result =
+              await response.json();
+
+            if(result.success){
+
+              alert(
+                "✅ Konfirmasi pembayaran berhasil dikirim"
+              );
+
+            } else {
+
+              alert(
+                "❌ " +
+                result.error
+              );
+
+            }
+
+          } catch(err){
+
+            alert(
+              err.message
+            );
+
+          }
+
+        };
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+</script>
 </div>
 
 </body>
+</html>
+<script>
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    const menu =
+      document.getElementById(
+        "menu-belajar-dinamis"
+      );
+
+    if (!menu) return;
+
+    try {
+
+      const res =
+        await fetch(
+          "https://opensheet.elk.sh/1DKNM74sV4SAVkOPmeSfCvQWmUxY8RDVrPmW6yuyi6Ww/Sheet1"
+        );
+      document
+  .querySelectorAll(
+    '[id^="belajar-"]'
+  )
+  .forEach(el => el.remove());
+      const data =
+        await res.json();
+
+      menu.innerHTML = "";
+
+      const daftar =
+        [...new Set(
+          data.map(
+            row =>
+              row[
+                Object.keys(row)[1]
+              ]
+          )
+        )]
+        .filter(Boolean);
+
+      if (daftar.length === 0) {
+
+        menu.innerHTML =
+          "<li><a href='#'>Data kosong</a></li>";
+
+        return;
+      }
+
+      daftar.forEach(nama => {
+
+        menu.innerHTML += `
+          <li>
+            <a href="#">
+              ${nama}
+            </a>
+          </li>
+        `;
+
+      });
+
+    } catch(err) {
+
+      console.error(err);
+
+      menu.innerHTML =
+        "<li><a href='#'>Gagal memuat</a></li>";
+
+    }
+
+  }
+);
+</script>
+<script>
+
+</script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const loginLink = [...document.querySelectorAll('li a')].find(a => a.textContent.trim() === "Log in");
@@ -473,11 +2656,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 <script>
+  
 </script>
 </html>
 <!-- Form Identitas (disembunyikan awalnya) -->
 <div class="main-container">
 <div id="identity-form">
+  
 <div class="info-message" id="motivasi-peserta">
         🎯 <strong>PESAN</strong><br/><span id="pesan-motivasi">Mengambil pesan...</span>
 </div>
@@ -485,9 +2670,10 @@ document.addEventListener("DOMContentLoaded", () => {
 <input id="email" placeholder="Isi Email" type="email"/><br/>
 <input id="name" placeholder="Nama" type="text"/><br/>
 <input id="sekolah" placeholder="Asal Sekolah" type="text"/><br/>
-<input id="kurikulum" placeholder="Kurikulum" type="text"/>
-<input id="kelas" placeholder="Kelas" type="text"/>
 <h2>Paket Soal</h2>
+<select id="kelas">
+<option value="">Pilih Kelas</option>
+</select>
 <select id="mapel"><option value="">Pilih Mata Pelajaran</option></select><br/>
 <select id="bab"><option value="">Memuat daftar bab...</option></select><br/>
 <select id="paket"><option value="">Pilih Paket</option></select><br/>
@@ -663,8 +2849,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <input id="signup-email" placeholder="Email" required type="email" /><div id="email-info" class="info"></div><br/>
     <input id="signup-nama" placeholder="Nama" required type="text" /><br/>
     <input id="signup-sekolah" placeholder="Asal Sekolah" required type="text" /><br/>
-    <select id="signup-kurikulum" required><option value="">Pilih Kurikulum</option></select><br/>
-    <select id="signup-kelas" required><option value="">Pilih Kelas</option></select><br/>
+    
 
 
     <input id="signup-password" placeholder="Password" required type="password" /><br/>
@@ -706,71 +2891,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordInfo = document.getElementById("password-info");
   const waInputs = ["wa-ayah", "wa-ibu", "wa-anak"];
   // 👉 Tambahkan kode ini di sini (SETELAH elemen signup-kurikulum & signup-kelas tersedia)
-  const kurikulumInput = document.getElementById("signup-kurikulum");
-  const kelasInput = document.getElementById("signup-kelas");
+  
  
-  // Muat Kurikulum saat halaman dimuat
-fetch("https://script.google.com/macros/s/AKfycbwH92B6xccP3IE5Pe4fpZD0R5kTT_CQt7T258I0J1pPLZniW0oUVlRGwLVtDj1IVmNp/exec")
-  .then(res => res.json())
-  .then(data => {
-
-    kurikulumInput.innerHTML = `<option value="">Pilih Kurikulum</option>`;
-
-    // 🔽 SORT ASCENDING
-    const sortedKurikulum = data.kurikulum.sort((a, b) =>
-      a.localeCompare(b, 'id', {
-        numeric: true,
-        sensitivity: 'base'
-      })
-    );
-
-    sortedKurikulum.forEach(n => {
-      const o = document.createElement("option");
-      o.value = n;
-      o.textContent = n;
-      kurikulumInput.appendChild(o);
-    });
-
-  });
-
-
-// Saat Kurikulum berubah, muat kelas
-kurikulumInput.addEventListener("change", () => {
-
-  const pilihan = kurikulumInput.value;
-
-  if (!pilihan) return;
-
-  fetch(`https://script.google.com/macros/s/AKfycbwH92B6xccP3IE5Pe4fpZD0R5kTT_CQt7T258I0J1pPLZniW0oUVlRGwLVtDj1IVmNp/exec?kurikulum=${encodeURIComponent(pilihan)}`)
-
-    .then(res => res.json())
-
-    .then(data => {
-
-      kelasInput.innerHTML = `<option value="">Pilih Kelas</option>`;
-
-      // 🔽 SORT ASCENDING
-      const sortedKelas = data.kelas.sort((a, b) =>
-        a.localeCompare(b, 'id', {
-          numeric: true,
-          sensitivity: 'base'
-        })
-      );
-
-      sortedKelas.forEach(n => {
-
-        const o = document.createElement("option");
-
-        o.value = n;
-        o.textContent = n;
-
-        kelasInput.appendChild(o);
-
-      });
-
-    });
-
-});
+ 
   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -792,27 +2915,66 @@ kurikulumInput.addEventListener("change", () => {
   });
 
   // Validasi Email real-time
-  emailInput.addEventListener("input", function () {
-    const email = this.value.trim();
-    emailInfo.textContent = "";
-    emailInfo.classList.remove("success");
+emailInput.addEventListener("input", function () {
 
-    if (!email.includes("@")) return;
+  const email =
+    this.value
+      .trim()
+      .toLowerCase();
 
-    fetch("https://script.google.com/macros/s/AKfycbwY95UgrjrCSxzpyFpNIw3trtTEa2WhkjLzAaEuHFF-XaI88B6rtMpNMbNQFP6Awaqs/exec?email=" + encodeURIComponent(email))
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === "exists") {
-          emailInfo.textContent = "❌ Email sudah terdaftar";
-        } else {
-          emailInfo.textContent = "✅ Email tersedia";
-          emailInfo.classList.add("success");
-        }
-      })
-      .catch(() => {
-        emailInfo.textContent = "⚠️ Tidak bisa cek email";
-      });
+  emailInfo.textContent = "";
+  emailInfo.classList.remove("success");
+
+  if (!email) return;
+
+  // FORMAT EMAIL
+  const regexEmail =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!regexEmail.test(email)) {
+
+    emailInfo.textContent =
+      "❌ Format email tidak valid";
+
+    return;
+
+  }
+
+  fetch(
+    "https://script.google.com/macros/s/AKfycbyBrHhQMWWz9XJKGAsPNVPfCQeVpUdLwCoKPhjOPorJCAJDa6impwP2YIxU8ugD25F7/exec" +
+    encodeURIComponent(email)
+  )
+
+  .then(res => res.json())
+
+  .then(data => {
+
+    if (data.status === "exists") {
+
+      emailInfo.textContent =
+        "❌ Email sudah terdaftar";
+
+    } else {
+
+      emailInfo.textContent =
+        "✅ Email dapat digunakan";
+
+      emailInfo.classList.add(
+        "success"
+      );
+
+    }
+
+  })
+
+  .catch(() => {
+
+    emailInfo.textContent =
+      "⚠️ Tidak bisa cek email";
+
   });
+
+});
 
   // Validasi Password cocok
   confirmInput.addEventListener("input", function () {
@@ -858,8 +3020,7 @@ kurikulumInput.addEventListener("change", () => {
     const email = emailInput.value.trim();
     const nama = document.getElementById("signup-nama").value.trim();
     const sekolah = document.getElementById("signup-sekolah").value.trim();
-    const kurikulum = document.getElementById("signup-kurikulum").value.trim();
-    const kelas = document.getElementById("signup-kelas").value.trim();
+    
     const password = passwordInput.value.trim();
     const konfirmasi = confirmInput.value.trim();
     const waAyahRaw = document.getElementById("signup-wa-ayah").value.trim();
@@ -894,8 +3055,7 @@ kurikulumInput.addEventListener("change", () => {
     formData.append("email", email);
     formData.append("nama", nama);
     formData.append("sekolah", sekolah);
-    formData.append("kurikulum", kurikulum);
-    formData.append("kelas", kelas);
+    
     formData.append("password", password);
     formData.append("pesan", "");
     formData.append("waAyah", waAyah);
