@@ -688,3 +688,241 @@ html, body {
 #feedback p {
   margin-bottom: 8px;
 }
+#total-biaya-box{
+
+  margin-top:30px;
+
+  padding:20px;
+
+  border-radius:18px;
+
+  background:#f5faff;
+
+  border:2px solid #90caf9;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+
+  text-align:center;
+}
+
+.total-label{
+
+  font-size:18px;
+
+  font-weight:700;
+
+  color:#1565c0;
+
+  margin-bottom:10px;
+}
+
+#total-biaya{
+
+  font-size:32px;
+
+  font-weight:bold;
+
+  color:#0d47a1;
+}
+#btn-metode-bayar{
+
+  margin-top:20px;
+
+  padding:14px 28px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1976d2,
+      #42a5f5
+    );
+
+  color:white;
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.15);
+
+  transition:0.25s;
+}
+
+#btn-metode-bayar:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.2);
+}
+.judul-bayar{
+
+  text-align:center;
+
+  margin-bottom:30px;
+
+  color:#1565c0;
+}
+
+.metode-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+
+  gap:20px;
+
+  margin-bottom:30px;
+}
+
+.metode-item{
+
+  padding:22px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #42a5f5,
+      #1976d2
+    );
+
+  color:white;
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:0.25s;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.15);
+}
+
+.metode-item:hover{
+
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 8px 18px rgba(0,0,0,0.2);
+}
+.label-status-OK{
+  background:#28a745;
+  color:white;
+  padding:2px 8px;
+  border-radius:8px;
+  font-size:11px;
+  margin-left:6px;
+}
+
+.label-status-BELI{
+  background:#dc3545;
+  color:white;
+  padding:2px 8px;
+  border-radius:8px;
+  font-size:11px;
+  margin-left:6px;
+}
+.tombol-3d{
+
+  min-height:140px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:center;
+
+  align-items:center;
+
+  text-align:center;
+
+}
+
+.judul-kelas{
+
+  font-size:18px;
+
+  font-weight:bold;
+
+  margin-bottom:8px;
+
+}
+
+.harga-kelas{
+
+  font-size:11px;
+
+  line-height:1.5;
+
+  font-weight:normal;
+
+}
+.tombol-kelas-container{
+
+  display:grid;
+
+  gap:20px;
+
+  width:100%;
+
+  padding:20px;
+
+  box-sizing:border-box;
+
+}
+
+/* Laptop / Desktop */
+@media (min-width:1024px){
+
+  .tombol-kelas-container{
+
+    grid-template-columns:
+      repeat(4, minmax(250px,1fr));
+
+  }
+
+}
+
+/* Tablet */
+@media (min-width:768px)
+and (max-width:1023px){
+
+  .tombol-kelas-container{
+
+    grid-template-columns:
+      repeat(2,1fr);
+
+  }
+
+}
+
+/* HP */
+@media (max-width:767px){
+
+  .tombol-kelas-container{
+
+    grid-template-columns:1fr;
+
+  }
+
+}
+.kembali-btn{
+  border-radius:999px;
+  padding:10px 25px;
+  min-width:120px;
+}
