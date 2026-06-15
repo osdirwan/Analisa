@@ -2507,51 +2507,71 @@ document
             e.target.result
               .split(",")[1];
 
-          const data = {
+          const now = new Date();
 
-            email:
-              document.getElementById(
-                "form-email"
-              ).value,
+const tanggalKirim =
+  now.getFullYear() +
+  String(now.getMonth()+1).padStart(2,"0") +
+  String(now.getDate()).padStart(2,"0") +
+  "-" +
+  String(now.getHours()).padStart(2,"0") +
+  String(now.getMinutes()).padStart(2,"0") +
+  String(now.getSeconds()).padStart(2,"0");
 
-            nama:
-              document.getElementById(
-                "form-nama"
-              ).value,
+const nama =
+  document.getElementById(
+    "form-nama"
+  ).value.trim();
 
-            paket:
-              document.getElementById(
-                "form-paket"
-              ).value,
+const email =
+  document.getElementById(
+    "form-email"
+  ).value.trim();
 
-            jenis:
-              document.getElementById(
-                "form-jenis"
-              ).value,
+const ext =
+  file.name
+    .split(".")
+    .pop();
 
-            metode:
-              document.getElementById(
-                "form-metode"
-              ).value,
+const data = {
 
-            total:
-              document.getElementById(
-                "form-total"
-              ).value,
+  email: email,
 
-            harga:
-              window.hargaDipilih || "",
+  nama: nama,
 
-            fileName:
-              file.name,
+  paket:
+    document.getElementById(
+      "form-paket"
+    ).value,
 
-            mimeType:
-              file.type,
+  jenis:
+    document.getElementById(
+      "form-jenis"
+    ).value,
 
-            fileData:
-              base64
+  metode:
+    document.getElementById(
+      "form-metode"
+    ).value,
 
-          };
+  total:
+    document.getElementById(
+      "form-total"
+    ).value,
+
+  harga:
+    window.hargaDipilih || "",
+
+  fileName:
+    `${tanggalKirim} - ${nama} - ${email}.${ext}`,
+
+  mimeType:
+    file.type,
+
+  fileData:
+    base64
+
+};
 
           try {
   console.log(data.paket);
