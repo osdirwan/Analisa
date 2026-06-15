@@ -1106,3 +1106,34 @@ header{
 .halaman-konten h2{
   text-align:center;
 }
+@media screen and (max-width:768px){
+
+  .tombol-kelas-container{
+
+    display:grid !important;
+
+    grid-template-columns:
+      repeat(
+        auto-fit,
+        minmax(140px,180px)
+      ) !important;
+
+    justify-content:center !important;
+
+    gap:12px !important;
+
+    width:100% !important;
+
+    margin:20px auto !important;
+  }
+
+  .tombol-3d{
+
+    width:100% !important;
+
+    margin:0 auto !important;
+
+    text-align:center !important;
+  }
+
+}
