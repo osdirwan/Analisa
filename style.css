@@ -972,3 +972,137 @@ and (max-width:1023px){
   }
 
 }
+.tombol-kelas-container{
+  display:grid;
+  gap:12px;
+  grid-template-columns:
+    repeat(auto-fit,minmax(160px,1fr));
+
+  width:100%;
+  max-width:1000px;
+  margin:20px auto;
+}
+
+.tombol-kelas-container .tombol-3d{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.tombol-kelas-container{
+  display:grid;
+  gap:12px;
+  justify-content:center;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(180px,220px)
+    );
+}
+.kembali-btn{
+  margin-top:20px;
+  padding:12px 24px;
+
+  background:#388e3c;
+  color:white;
+
+  border:none;
+  border-radius:15px; /* sudut membulat */
+
+  cursor:pointer;
+  font-weight:bold;
+}
+.kembali-btn{
+  display:block !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+header{
+  animation:
+    floatingHeader 4s ease-in-out infinite;
+}
+
+@keyframes floatingHeader{
+
+  0%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-3px);
+  }
+
+  100%{
+    transform:translateY(0);
+  }
+
+}
+.tombol-3d{
+  position:relative;
+  overflow:hidden;
+}
+
+.tombol-3d::before{
+  content:"";
+
+  position:absolute;
+  top:0;
+  left:-120%;
+
+  width:50%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent,
+      rgba(255,255,255,.8),
+      transparent
+    );
+
+  transform:skewX(-25deg);
+
+  animation:
+    kilauSekali 2s ease-out forwards;
+}
+
+@keyframes kilauSekali{
+
+  from{
+    left:-120%;
+  }
+
+  to{
+    left:150%;
+  }
+
+}
+/* Dropdown selalu di depan */
+.dropdown{
+  position:relative;
+}
+
+.dropdown-menu{
+  position:absolute;
+  z-index:99999 !important;
+
+  display:none;
+}
+
+/* Saat aktif */
+.dropdown:hover .dropdown-menu{
+  display:block;
+}
+header{
+  position:relative;
+  z-index:10000;
+}
+
+.dropdown-menu{
+  position:absolute;
+  z-index:10001;
+}
+.halaman-konten h2{
+  text-align:center;
+}
