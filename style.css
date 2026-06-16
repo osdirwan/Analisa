@@ -1091,9 +1091,14 @@ header{
 }
 
 /* Saat aktif */
-.dropdown:hover .dropdown-menu{
+.dropdown-menu{
+  display:none;
+}
+
+.dropdown.open .dropdown-menu{
   display:block;
 }
+
 header{
   position:relative;
   z-index:10000;
