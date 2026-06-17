@@ -115,13 +115,12 @@ html, body {
 }
  /* Hover pilihan jawaban */
 #options label:hover {
-  background: linear-gradient(to bottom, #1e88e5, #0d47a1);
-  border: 2px solid #002171;
+  background: linear-gradient(to bottom, #66bb6a, #2e7d32);
+  border-color: #23166c;
   color: white;
-  box-shadow: 0 3px 10px rgba(13,71,161,.45);
+  box-shadow: 0 2px 8px rgba(46,125,50,.35);
   transition: all .2s ease;
 }
-
 #options input[type="radio"] {
   margin-right: 8px;
 }
