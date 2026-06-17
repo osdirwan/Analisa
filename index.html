@@ -194,22 +194,23 @@ Membantu persiapan Ulangan Harian, Sumatif, ANBK, TKA, UTBK, Ujian Masuk PTN, se
 ✅ <b>Soal Trial Gratis</b><br>
 Peserta dapat mencoba berbagai soal trial sebelum memutuskan membeli paket belajar.</b><br><br></b>
 
-📖 <b>CARA MENGGUNAKAN BIMBEL ANTIREMED</b><br><br>
+📖 <b>CARA MENGGUNAKAN APLIKASI BIMBEL ANTIREMED</b><br><br>
 
-1️⃣ Setting Hp ke <b>Mode Terang</b> bila diperlukan. Klik menu <b>Akun → Sign Up</b> untuk membuat akun baru atau langsung klik <b>Akun → Login</b> untuk mencoba sistem terlebih dahulu melalui <b>Soal Trial Version</b>.<br><br>
+1️⃣ Setting HP ke <b>Mode Terang</b> bila diperlukan.<br><br>
 
-2️⃣ Setelah memiliki akun, klik <b>Akun → Login</b> menggunakan email dan password yang telah didaftarkan.<br><br>
+2️⃣ Klik menu <b>Akun → Sign Up</b> untuk membuat akun baru, atau langsung klik <b>Akun → Login</b> untuk mencoba sistem melalui <b>Soal Trial Version</b> terlebih dahulu.<br><br>
 
-3️⃣ Klik menu <b>Pembelian</b> untuk melihat paket belajar yang tersedia dan pilih paket yang sesuai kebutuhan.<br><br>
+3️⃣ Setelah memiliki akun, klik menu <b>Akun → Login</b> menggunakan email dan password yang telah didaftarkan.<br><br>
 
-4️⃣ Lakukan pembayaran sesuai metode yang tersedia, kemudian kirim konfirmasi pembayaran melalui sistem.<br><br>
+4️⃣ Klik menu <b>Pembelian</b> untuk melihat paket belajar yang tersedia, kemudian pilih paket yang sesuai dengan kebutuhan.<br><br>
 
-5️⃣ Tunggu pembayaran diverifikasi, status paket akan berubah menjadi <b>AKTIF</b> dan dapat digunakan selama masa berlaku paket.<br><br>
+5️⃣ Lakukan pembayaran sesuai metode yang tersedia, kemudian kirim konfirmasi pembayaran melalui sistem.<br><br>
 
-6️⃣ Klik menu <b>Belajar</b> untuk memilih kelas, mata pelajaran, bab materi, dan paket soal yang tersedia.<br><br>
+6️⃣ Tunggu hingga pembayaran diverifikasi. Status paket akan berubah menjadi <b>AKTIF</b> dan dapat digunakan selama masa berlaku paket.<br><br>
 
-7️⃣ Kerjakan latihan soal secara rutin dan pantau nilai serta perkembangan belajar pada halaman <b>Data Prestasi</b>.<br><br>
+7️⃣ Klik menu <b>Belajar</b> untuk memilih kelas, mata pelajaran, bab materi, dan paket soal yang akan dikerjakan.<br><br>
 
+8️⃣ Kerjakan latihan soal secara rutin, kemudian pantau nilai dan perkembangan belajar melalui halaman <b>Data Prestasi</b>.<br><br>
 <div class="marquee-container">
   <div class="marquee-text">
     🌟 Belajar Lebih Mudah, Lebih Cepat, dan Lebih Hemat bersama Bimbel Antiremed.
@@ -1527,15 +1528,16 @@ loadDaftarPaket();
   ">
 
   <button
-    id="btn-kembali-paket"
+    id="btn-lanjut-metode"
     class="main-button">
-      ⬅️ Kembali
+      ✅ OK
     </button>
 
     <button
-      id="btn-lanjut-metode"
+      
+      id="btn-kembali-paket"
       class="main-button">
-      ✅ OK
+      ⬅️ Kembali
     </button>
 
   </div>
@@ -1795,24 +1797,25 @@ document
 
 </div>
 
-  <button
+  <div class="button-group">
+
+<button
   class="main-button"
   onclick="
     document
       .querySelectorAll(
-        '.halaman, .halaman-konten'
+        '.halaman,.halaman-konten'
       )
-      .forEach(
-        el => el.style.display='none'
-      );
+      .forEach(el=>el.style.display='none');
 
     document.getElementById(
       'konfirmasi-paket-page'
     ).style.display='block';
-  "
->
-  KEMBALI
+">
+⬅️ Kembali
 </button>
+
+</div>
 
 </div>
 
@@ -2041,6 +2044,12 @@ document
     flex-wrap:wrap;
   ">
 
+      <button
+      id="btn-kirim-konfirmasi"
+      class="main-button">
+    
+      ✅ Kirim Konfirmasi
+    </button>
     <button
       id="btn-kembali-konfirmasi-bayar"
       class="main-button">
@@ -2048,12 +2057,7 @@ document
       ⬅️ Kembali
     </button>
 
-    <button
-      id="btn-kirim-konfirmasi"
-      class="main-button">
     
-      ✅ Kirim Konfirmasi
-    </button>
 
   </div>
 
@@ -2202,18 +2206,18 @@ document
     margin-top:20px;
     flex-wrap:wrap;
   ">
-
+    <button
+      id="btn-sudah-bayar"
+      class="main-button">
+      ✅ Saya Sudah Bayar
+    </button>
     <button
       id="btn-kembali-metode"
       class="main-button">
       ⬅️ Kembali
     </button>
 
-    <button
-      id="btn-sudah-bayar"
-      class="main-button">
-      ✅ Saya Sudah Bayar
-    </button>
+
 
   </div>
 <script>
