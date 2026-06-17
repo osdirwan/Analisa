@@ -115,26 +115,27 @@ html, body {
 }
  /* Hover pilihan jawaban */
 #options label:hover {
-  background: linear-gradient(to bottom, #66bb6a, #2e7d32);
-  border-color: #23166c;
+  background: linear-gradient(to bottom, #43a047, #1b5e20);
+  border: 2px solid #0d3b16;
   color: white;
-  box-shadow: 0 2px 8px rgba(46,125,50,.35);
+  box-shadow: 0 3px 10px rgba(27,94,32,.4);
   transition: all .2s ease;
 }
+
 #options input[type="radio"] {
   margin-right: 8px;
 }
  
 .correct {
-  background-color: #2e7d32 !important;   /* Hijau tua */
-  border: 2px solid #1b5e20;
-  color: #fff;
+  background: linear-gradient(to bottom, #1e88e5, #0d47a1) !important;
+  border: 2px solid #002171;
+  color: white;
 }
 
 .selected:not(.correct) {
-  background-color: #c62828 !important;   /* Merah tua */
-  border: 2px solid #8e0000;
-  color: #fff;
+  background: linear-gradient(to bottom, #e53935, #b71c1c) !important;
+  border: 2px solid #7f0000;
+  color: white;
 }
  
 #feedback {
@@ -481,15 +482,15 @@ html, body {
 }
  
 .option.benar {
-  background-color: #2e7d32;   /* Hijau tua */
-  border: 2px solid #1b5e20;
-  color: #fff;
+  background: linear-gradient(to bottom, #1e88e5, #0d47a1);
+  border: 2px solid #002171;
+  color: white;
 }
 
 .option.salah {
-  background-color: #c62828;   /* Merah tua */
-  border: 2px solid #8e0000;
-  color: #fff;
+  background: linear-gradient(to bottom, #e53935, #b71c1c);
+  border: 2px solid #7f0000;
+  color: white;
 }
 .option.dipilih {
   border: 2px solid #2196f3; /* biru */
@@ -673,11 +674,7 @@ html, body {
   background: linear-gradient(to bottom, #ef9a9a, #d32f2f); /* Merah */
   color: white;
 }
-#options label:hover {
-  background-color: #ccffcc; /* Hijau muda saat hover */
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
+
 
 #options label {
   display: block;
