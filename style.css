@@ -1184,29 +1184,45 @@ header{
 .main-button:hover {
     background: linear-gradient(to bottom, #64b5f6, #1976d2);
 }
-/* =========================================
-   POSISI TOMBOL HALAMAN PEMBELIAN
-========================================= */
-
+/* Grup tombol */
 .button-group{
     display:flex;
     justify-content:center;
+    align-items:center;
     gap:15px;
-    flex-wrap:wrap;
-    margin-top:20px;
+    margin:25px auto;
+    width:100%;
+}
+
+/* Tombol */
+.button-group .main-button{
+    width:170px;
 }
 
 /* HP */
-
 @media (max-width:768px){
 
 .button-group{
+    flex-direction:column;
     justify-content:center;
     align-items:center;
 }
 
 .button-group .main-button{
-    width:170px;
+    width:220px;
 }
 
+}
+.touch-hover{
+    background:linear-gradient(to bottom,#43a047,#1b5e20)!important;
+    color:#fff!important;
+    border:2px solid #0d3b16!important;
+    box-shadow:0 3px 10px rgba(27,94,32,.4);
+}
+/* Dipilih tetapi belum dikonfirmasi */
+.option-preview{
+    background:linear-gradient(to bottom,#43a047,#1b5e20)!important;
+    color:#fff!important;
+    border:2px solid #0d3b16!important;
+    box-shadow:0 3px 10px rgba(27,94,32,.4);
 }
