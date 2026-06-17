@@ -277,11 +277,13 @@ if (
     .toUpperCase() === "OK"
 ) {
 
-  alert(
+alert(
 `✅ Login berhasil
 
-Selamat datang ${user.nama}`
-  );
+Selamat datang ${user.nama}
+
+Silakan klik menu Belajar atau menu Pembelian`
+);
 
   window.loggedInEmail =
     user.email;
@@ -1256,6 +1258,7 @@ refreshBtn.addEventListener("click", () => {
 });
 
 const finishBtn = document.createElement("button");
+finishBtn.classList.add("finish-button");
 finishBtn.textContent = "✅ KELUAR";
 finishBtn.addEventListener("click", () => {
   const yakin = confirm("Yakin ingin keluar dari aplikasi?");
