@@ -53,15 +53,7 @@
     .halaman-konten h2 {
       margin-top: 0;
     }
-    .kembali-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #388e3c;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    
   </style>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -107,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
-<div class="watermark">ANTIREMED</div>
 <body>
 <!-- Halaman Beranda -->
 <header style="background-color: #4a90e2; color: white; padding: 20px; display: flex; align-items: center;">
@@ -272,9 +263,9 @@ Peserta dapat mencoba berbagai soal trial sebelum memutuskan membeli paket belaj
   </div>
 
   <button
-    id="btn-konfirmasi-paket"
-    class="btn-3d btn-3d-blue"
-  >
+    id="btn-konfirmasi-paket" 
+    class="main-button">
+    
   Lanjut
 
 </div>
@@ -1537,31 +1528,13 @@ loadDaftarPaket();
 
   <button
     id="btn-kembali-paket"
-    class="btn-3d btn-3d-gray"
-      style="
-        padding:12px 20px;
-        border:none;
-        border-radius:10px;
-        background:#888;
-        color:white;
-        cursor:pointer;
-      "
-    >
+    class="main-button">
       ⬅️ Kembali
     </button>
 
     <button
       id="btn-lanjut-metode"
-      class="btn-3d btn-3d-green"
-      style="
-        padding:12px 20px;
-        border:none;
-        border-radius:10px;
-        background:#28a745;
-        color:white;
-        cursor:pointer;
-      "
-    >
+      class="main-button">
       ✅ OK
     </button>
 
@@ -1823,7 +1796,7 @@ document
 </div>
 
   <button
-  class="kembali-btn btn-3d btn-3d-gray"
+  class="main-button"
   onclick="
     document
       .querySelectorAll(
@@ -2070,15 +2043,15 @@ document
 
     <button
       id="btn-kembali-konfirmasi-bayar"
-      class="btn-3d btn-3d-gray"
-    >
+      class="main-button">
+    
       ⬅️ Kembali
     </button>
 
     <button
       id="btn-kirim-konfirmasi"
-      class="btn-3d btn-3d-green"
-    >
+      class="main-button">
+    
       ✅ Kirim Konfirmasi
     </button>
 
@@ -2232,15 +2205,13 @@ document
 
     <button
       id="btn-kembali-metode"
-      class="btn-3d btn-3d-gray"
-    >
+      class="main-button">
       ⬅️ Kembali
     </button>
 
     <button
       id="btn-sudah-bayar"
-      class="btn-3d btn-3d-green"
-    >
+      class="main-button">
       ✅ Saya Sudah Bayar
     </button>
 
@@ -2321,7 +2292,7 @@ document
 
       document
         .getElementById(
-          "konfirmasi-paket-page"
+          "metode-bayar-page"
         )
         .style.display = "block";
 
