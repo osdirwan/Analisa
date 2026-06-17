@@ -1314,63 +1314,26 @@ if (navBtn) {
 
   q.options.forEach((opt) => {
     const label = document.createElement("label");
-
-label.innerHTML = `
-  <input
-    type="radio"
-    name="option"
-    value="${opt.key}"
-    data-label="${opt.label}"
-    ${isReadonlyMode ? "disabled" : ""}
-  >
-  ${opt.label}.
-  <span class="option-text">
-    ${renderMarkdown(opt.value)}
-  </span>
-  ${
-    opt.image
-      ? `<br><img src="${opt.image}"
-           style="max-width:100px;margin-top:5px;">`
-      : ""
-  }
-`;
-// Preview pilihan sebelum konfirmasi
-label.addEventListener("click", function(){
-
-    optionsEl
-      .querySelectorAll("label")
-      .forEach(l =>
-          l.classList.remove("option-preview")
-      );
-
-    this.classList.add("option-preview");
+    label.innerHTML = `
+      <input type="radio" name="option" value="${opt.key}" data-label="${opt.label}" ${isReadonlyMode ? "disabled" : ""}>
+      ${opt.label}. <span class="option-text">${renderMarkdown(opt.value)}</span>
+      ${opt.image ? `<br><img src="${opt.image}" alt="Gambar Opsi" style="max-width: 100px; margin-top: 5px;">` : ""}
+    `;
     optionsEl.appendChild(label);
-});
-/* ========= UNTUK HP ========= */
-
-label.addEventListener("touchstart",function(){
-
-    this.classList.add("touch-hover");
-
-});
-
-label.addEventListener("touchend",function(){
-
-    this.classList.remove("touch-hover");
-
-});
-
-label.addEventListener("touchcancel",function(){
-
-    this.classList.remove("touch-hover");
-
-});
-
-/* ============================ */
-
-optionsEl.appendChild(label);
   });
-  
+  // Efek sentuh (HP)
+document.querySelectorAll("#options label").forEach(label => {
+
+  label.addEventListener("pointerdown", () => {
+
+    document.querySelectorAll("#options label")
+      .forEach(l => l.classList.remove("hover-touch"));
+
+    label.classList.add("hover-touch");
+
+  });
+
+});
   const inputs = optionsEl.querySelectorAll("input");
   
   if (currentAnswer !== null) {
@@ -1389,7 +1352,7 @@ optionsEl.appendChild(label);
         
         userAnswers[current] = {
           isCorrect,
-          selectedKeya
+          selectedKey
         };
 
         if (isCorrect) {
@@ -1398,11 +1361,6 @@ optionsEl.appendChild(label);
         }
 
         inputs.forEach(inp => inp.disabled = true);
-        optionsEl
-        .querySelectorAll("label")
-        .forEach(l =>
-            l.classList.remove("option-preview")
-        );
         document.getElementById(`nav-btn-${current}`).classList.add("answered");
 
         showAnswerResult(q, userAnswers[current], inputs, current);
