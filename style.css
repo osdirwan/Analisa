@@ -1184,3 +1184,29 @@ header{
 .main-button:hover {
     background: linear-gradient(to bottom, #64b5f6, #1976d2);
 }
+/* =========================================
+   POSISI TOMBOL HALAMAN PEMBELIAN
+========================================= */
+
+.button-group{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+/* HP */
+
+@media (max-width:768px){
+
+.button-group{
+    justify-content:center;
+    align-items:center;
+}
+
+.button-group .main-button{
+    width:170px;
+}
+
+}
