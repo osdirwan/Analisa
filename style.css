@@ -278,7 +278,7 @@ html, body {
  
 #identity-form h2 {
   font-size: 24px;
-  color: #00796b;
+  color: #1565c0;
   margin-bottom: 25px;
 }
  
@@ -302,27 +302,26 @@ html, body {
 }
  
 #start-btn {
-  width: 160px;           /* Lebar fix */
-  height: 50px;           /* Tinggi fix */
-  background: linear-gradient(to right, #4db6ac, #00796b);
+  width: 160px;
+  height: 50px;
+  background: linear-gradient(to bottom, #42a5f5, #1565c0);
   color: white;
   padding: 14px 30px;
   font-size: 18px;
-  border: none;
+  font-weight: bold;
+  border: 2px solid #0d47a1;
   border-radius: 25px;
-  margin-top: 20px;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: all .2s ease;
 }
- 
+
 #start-btn:hover {
-  background: linear-gradient(to right, #00796b, #004d40);
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 121, 107, 0.3);
+  background: linear-gradient(to bottom, #64b5f6, #1976d2);
+  box-shadow: 0 4px 10px rgba(21,101,192,.35);
 }
 .identity-info strong,
 .identity-info span {
-  color: #388e3c !important;
+  color: #1565c0 !important;
 }
 #kelas-section {
   display: none;
@@ -335,17 +334,21 @@ html, body {
 }
  
 .main-button {
-  width: 160px;           /* Lebar fix */
-  height: 50px;           /* Tinggi fix */
-  background: linear-gradient(to right, #4db6ac, #00796b);
+  width: 160px;
+  height: 50px;
+  background: linear-gradient(to bottom, #42a5f5, #1565c0);
   color: white;
-  padding: 14px 30px;
-  font-size: 18px;
-  border: none;
+  border: 2px solid #0d47a1;
   border-radius: 25px;
-  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: .2s;
+}
+
+.main-button:hover {
+  background: linear-gradient(to bottom, #64b5f6, #1976d2);
+  box-shadow: 0 5px 15px rgba(21,101,192,.35);
 }
  
 .main-button:hover {
@@ -1147,4 +1150,10 @@ header{
     text-align:center !important;
   }
 
+}
+
+/* Judul Login dan Sign Up */
+#login-page h2,
+#signup-page h2 {
+    color: #1565c0 !important;
 }
