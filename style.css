@@ -329,7 +329,9 @@ html, body {
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  align-items: center;
+  gap: 20px;      /* Jarak antar tombol */
+  flex-wrap: wrap;
   margin-top: 20px;
 }
  
@@ -381,7 +383,18 @@ html, body {
     flex-direction: column;
     height: auto;
   }
- 
+ /* Halaman Login & Sign Up di HP */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;          /* Jarak tombol Log in dan Kembali */
+  margin-top: 20px;
+  flex-wrap: nowrap;
+}
+
+.button-container .main-button {
+  width: 140px;
+}
   .quiz-content {
     order: 2;
     flex: unset;
