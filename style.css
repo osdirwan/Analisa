@@ -1213,82 +1213,8 @@ header{
 }
 
 }
-.touch-hover{
-    background:linear-gradient(to bottom,#43a047,#1b5e20)!important;
-    color:#fff!important;
-    border:2px solid #0d3b16!important;
-    box-shadow:0 3px 10px rgba(27,94,32,.4);
-}
-/* Dipilih tetapi belum dikonfirmasi */
-.option-preview{
-    background:linear-gradient(to bottom,#43a047,#1b5e20)!important;
-    color:#fff!important;
-    border:2px solid #0d3b16!important;
-    box-shadow:0 3px 10px rgba(27,94,32,.4);
-}
-#finish-btn{
-    width:160px;
-    height:50px;
-
-    background:linear-gradient(to bottom,#42a5f5,#1565c0);
-    color:white;
-
-    border:2px solid #0d47a1;
-    border-radius:999px;
-
-    font-size:18px;
-    font-weight:bold;
-
-    cursor:pointer;
-    transition:.2s;
-}
-
-#finish-btn:hover{
-    background:linear-gradient(to bottom,#64b5f6,#1976d2);
-}
-/* Tombol Mulai & Selesai */
-.button-container{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-    margin-top:25px;
-}
-
-#start-btn,
-#exit-btn{
-
-    width:160px;
-    height:50px;
-
-    background:linear-gradient(to bottom,#42a5f5,#1565c0);
-    color:white;
-
-    border:2px solid #0d47a1;
-    border-radius:999px;
-
-    font-size:18px;
-    font-weight:bold;
-
-    cursor:pointer;
-    transition:.2s;
-}
-
-#start-btn:hover,
-#exit-btn:hover{
-
-    background:linear-gradient(to bottom,#64b5f6,#1976d2);
-
-}
-
-@media (max-width:768px){
-
-    .button-container{
-
-        flex-direction:column;
-
-        gap:20px;   /* jarak vertikal */
-
-    }
-
+.hover-touch{
+    background:linear-gradient(to bottom,#2e7d32,#1b5e20);
+    color:#fff;
+    border-color:#0d47a1;
 }
