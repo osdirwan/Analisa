@@ -282,7 +282,7 @@ alert(
 
 Selamat datang ${user.nama}
 
-Silakan klik menu Belajar atau menu Pembelian`
+Silakan klik menu Belajar atau menu Beli Paket`
 );
 
   window.loggedInEmail =
@@ -623,7 +623,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(err => console.error("❌ Gagal memuat data peserta:", err));
 });
-
+// Ambil data status pembelian dari Sheet2
+fetch("https://opensheet.elk.sh/15rUUAyWjGOMrT3Nz1hEbBQgn1OYY0OB-xUx4hHOcnfQ/Sheet2")
+  .then(res => res.json())
+  .then(data => {
+    window.statusPaket = data;
+  })
+  .catch(err => console.error("❌ Gagal memuat status paket:", err));
 // Autofill data berdasarkan email
 emailInput.addEventListener("blur", () => {
 
@@ -1617,15 +1623,28 @@ function tampilkanLeaderboard() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const exitBtn = document.getElementById("exit-btn");
-  if (exitBtn) {
-    exitBtn.addEventListener("click", () => {
-      if (confirm("Yakin ingin keluar dari aplikasi?")) {
-        window.open('', '_self');
-        window.location.href = "https://google.com";
-        
-      }
-    });
+exitBtn.addEventListener("click", () => {
+
+
+
+  // Hentikan timer jika ada
+  if (typeof timerInterval !== "undefined") {
+    clearInterval(timerInterval);
   }
+
+  // Sembunyikan semua halaman
+  document
+    .querySelectorAll(
+      ".halaman,.halaman-konten,#identity-form,#quiz-box"
+    )
+    .forEach(el => {
+      el.style.display = "none";
+    });
+
+  // Tampilkan Beranda
+  document.getElementById("beranda").style.display = "block";
+
+});
 });
 async function cekRiwayatKuis() {
   const url = "https://opensheet.elk.sh/1sW3Yw1Ge_6yibNqXXvpyIzGgzrOnMzIePfIjqCHbqM0/DATANILAI";
@@ -1984,163 +2003,142 @@ document.addEventListener(
 );
 async function loadMenuBelajar() {
 
-  const menu =
-    document.getElementById(
-      "menu-belajar-dinamis"
-    );
-
+  const menu = document.getElementById("menu-belajar-dinamis");
   if (!menu) return;
 
   try {
 
-    const res =
-      await fetch(
-        "https://opensheet.elk.sh/1DKNM74sV4SAVkOPmeSfCvQWmUxY8RDVrPmW6yuyi6Ww/Sheet1"
-      );
+    // ==========================
+    // DATA MAPEL
+    // ==========================
+    const resData = await fetch(
+      "https://opensheet.elk.sh/1DKNM74sV4SAVkOPmeSfCvQWmUxY8RDVrPmW6yuyi6Ww/Sheet1"
+    );
 
-    const data =
-      await res.json();
+    const data = await resData.json();
+
+    // ==========================
+    // DATA URUTAN MENU
+    // ==========================
+    const resUrutan = await fetch(
+      "https://opensheet.elk.sh/1XJxNFOri1o1ywVQynZRObZ5xJfXy3YfdQL0nuMJXa6g/Sheet1"
+    );
+
+    const urutan = await resUrutan.json();
 
     menu.innerHTML = "";
 
-    const daftarMenu =
-  [...new Set(
-    data.map(row =>
-      (Object.values(row)[1] || "")
-        .toString()
-        .trim()
-    )
-  )]
-  .filter(nama =>
-    nama &&
-    nama.toUpperCase() !==
-    "SOAL TRIAL VERSION"
-  )
-  .sort((a, b) =>
-    a.localeCompare(
-      b,
-      "id",
-      {
-        numeric: true,
-        sensitivity: "base"
-      }
-    )
-  );
-
-daftarMenu.forEach(nama => {
-
-  const id =
-    "belajar-" +
-    nama
-      .replace(/\s+/g, "-")
-      .toLowerCase();
-
-  menu.innerHTML += `
-    <li>
-      <a
-        href="#"
-        class="menu-belajar"
-        data-target="${id}">
-        ${nama}
-      </a>
-    </li>
-  `;
-
-  const tombol =
-    [...new Set(
-      data
-        .filter(row =>
-          Object.values(row)[1] === nama
-        )
-        .map(row =>
-          Object.values(row)[2]
-        )
-    )]
-    .filter(Boolean)
-    .sort((a, b) =>
-      a.localeCompare(
-        b,
-        "id",
-        {
-          numeric: true,
-          sensitivity: "base"
-        }
-      )
-    )
-    .map(item => `
-      <button
-        class="tombol-3d"
-        data-paket="${item}">
-        ${item}
-      </button>
-    `)
-    .join("");
-
-  const halaman =
-    document.createElement("div");
-
-  halaman.className =
-    "halaman-konten";
-
-  halaman.id = id;
-
-  halaman.innerHTML = `
-    <h2>${nama}</h2>
-    <div class="tombol-kelas-container grid-kelas">
-    ${tombol}
-    </div>
-    
-
-    <button class="kembali-btn">
-      KEMBALI
-    </button>
-  `;
-
-  document.body.appendChild(
-    halaman
-  );
-
-});
-    
-await updateInfoPaketTombol();
+    // Hapus halaman lama agar tidak dobel
     document
-      .querySelectorAll(
-        ".menu-belajar"
+      .querySelectorAll(".halaman-konten[data-belajar='1']")
+      .forEach(el => el.remove());
+
+    const sudahAda = new Set();
+
+    urutan.forEach(row => {
+
+      const nama = (Object.values(row)[0] || "").trim();
+
+      if (!nama) return;
+      if (nama.toUpperCase() === "SOAL TRIAL VERSION") return;
+      if (sudahAda.has(nama)) return;
+
+      sudahAda.add(nama);
+
+      const id =
+        "belajar-" +
+        nama.replace(/\s+/g, "-").toLowerCase();
+
+      // ========= MENU =========
+      menu.innerHTML += `
+        <li>
+          <a href="#"
+             class="menu-belajar"
+             data-target="${id}">
+             ${nama}
+          </a>
+        </li>
+      `;
+
+      // ========= TOMBOL KELAS =========
+      const tombol =
+  [...new Set(
+    data
+      .filter(r =>
+        (Object.values(r)[1] || "")
+          .toString()
+          .trim() === nama
       )
+      .map(r =>
+        (Object.values(r)[2] || "").toString().trim()
+      )
+  )]
+  .filter(Boolean)
+  .sort((a, b) =>
+    a.localeCompare(b, "id", {
+      numeric: true,
+      sensitivity: "base"
+    })
+  )
+  .map(item => `
+    <button
+      class="tombol-3d"
+      data-paket="${item}">
+      ${item}
+    </button>
+  `)
+  .join("");
+
+      const halaman =
+        document.createElement("div");
+
+      halaman.className = "halaman-konten";
+      halaman.dataset.belajar = "1";
+      halaman.id = id;
+
+      halaman.innerHTML = `
+        <h2>${nama}</h2>
+
+        <div class="tombol-kelas-container grid-kelas">
+          ${tombol}
+        </div>
+
+        <button class="kembali-btn">
+          KEMBALI
+        </button>
+      `;
+
+      document.body.appendChild(halaman);
+
+    });
+
+    await updateInfoPaketTombol();
+
+    document.querySelectorAll(".menu-belajar")
       .forEach(link => {
 
-        link.onclick =
-          function(e){
+        link.onclick = function(e) {
 
-            e.preventDefault();
+          e.preventDefault();
 
-            document
-              .querySelectorAll(
-                ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
-              )
-              .forEach(
-                el =>
-                  el.style.display =
-                    "none"
-              );
+          document
+            .querySelectorAll(
+              ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
+            )
+            .forEach(el => el.style.display = "none");
 
-            document
-              .getElementById(
-                this.dataset.target
-              )
-              .style.display =
-                "block";
+          document
+            .getElementById(this.dataset.target)
+            .style.display = "block";
 
-          };
+        };
 
       });
 
-  } catch(err) {
+  } catch (err) {
 
-    console.error(err);
-
-    menu.innerHTML =
-      "<li><a href='#'>Gagal memuat</a></li>";
+    console.error("loadMenuBelajar:", err);
+    alert("Gagal memuat menu belajar.");
 
   }
 
@@ -2150,54 +2148,116 @@ document.addEventListener(
   "DOMContentLoaded",
   loadMenuBelajar
 );
-document.addEventListener("click", function(e){
 
-  const btn =
-    e.target.closest(".tombol-3d");
+// Mengubah format dd/MM/yyyy HH:mm:ss menjadi Date
+function parseTanggal(str) {
 
+  if (!str) return new Date(0);
+
+  const [tanggal, jam] = str.trim().split(" ");
+  const [dd, mm, yyyy] = tanggal.split("/").map(Number);
+  const [hh = 0, mi = 0, ss = 0] = (jam || "").split(":").map(Number);
+
+  return new Date(yyyy, mm - 1, dd, hh, mi, ss);
+
+}
+
+document.addEventListener("click", function (e) {
+
+  const btn = e.target.closest(".tombol-3d");
   if (!btn) return;
 
-  const status =
-    btn.dataset.status || "BELI PAKET";
+  const paket = (btn.dataset.paket || "").trim();
 
-  const paket =
-    btn.dataset.paket || "";
-
-  // simpan paket yang dipilih
+  // Simpan paket yang dipilih
   window.paketDipilih = paket;
 
-  if (status === "OK") {
+  // Ambil data TERBARU berdasarkan Email + Paket
+  const row = (window.statusPaket || [])
+    .filter(r =>
+      (r.Email || "").trim().toLowerCase() ===
+      (window.loggedInEmail || "").trim().toLowerCase()
+
+      &&
+
+      (r.Paket || "").trim().toUpperCase() ===
+      paket.toUpperCase()
+    )
+    .sort((a, b) =>
+      new Date(b.Tanggal) - new Date(a.Tanggal)
+    )[0];
+
+  let bolehMasuk = false;
+
+  if (row) {
+
+    console.log("Data terbaru :", row);
+
+    const keaktifan =
+      (row.Keaktifan || "")
+        .trim()
+        .toUpperCase();
+
+    const permission =
+      (row.Permission || "")
+        .trim()
+        .toUpperCase();
+
+    // Sedang diverifikasi
+    if (
+      keaktifan === "AKTIF" &&
+      permission === ""
+    ) {
+
+      alert("⏳ Silakan coba lagi 1 x 24 jam. Sedang verifikasi data pembayaran. Mohon ditunggu.");
+      return;
+
+    }
+
+    // Paket aktif
+    if (
+      keaktifan === "AKTIF" &&
+      permission === "OK"
+    ) {
+
+      bolehMasuk = true;
+
+    }
+
+    // Masa aktif habis
+    if (
+      keaktifan === "NO" &&
+      permission === "OK"
+    ) {
+
+      alert("⚠️ Masa berlaku habis, silakan beli paket kembali.");
+
+    }
+
+  }
+
+  // Sembunyikan semua halaman
+  document
+    .querySelectorAll(
+      ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
+    )
+    .forEach(el => el.style.display = "none");
+
+  // Tampilkan halaman
+  if (bolehMasuk) {
 
     document
-      .querySelectorAll(
-        ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
-      )
-      .forEach(el =>
-        el.style.display = "none"
-      );
-
-    document
-      .getElementById(
-        "identity-form"
-      )
+      .getElementById("identity-form")
       .style.display = "block";
 
   } else {
 
     document
-      .querySelectorAll(
-        ".halaman,.halaman-konten,#identity-form,#login-page,#signup-page,#metode-bayar-page,#quiz-box,#leaderboard"
-      )
-      .forEach(el =>
-        el.style.display = "none"
-      );
-
-    document
-      .getElementById(
-        "daftar-paket"
-      )
+      .getElementById("daftar-paket")
       .style.display = "block";
-
+    // tampilkan hanya paket yang sama
+    // dengan nama tombol
+    loadDaftarPaket(paket);
   }
 
 });
@@ -2470,6 +2530,70 @@ const jumlahPaket =
       "Gagal memuat info paket",
       err
     );
+
+  }
+
+}
+async function cekStatusPaket(email, namaKelas) {
+
+  try {
+
+    const url =
+      "https://opensheet.elk.sh/15rUUAyWjGOMrT3Nz1hEbBQgn1OYY0OB-xUx4hHOcnfQ/Sheet2";
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const row = data
+      .filter(r =>
+        (r.Email || "")
+          .trim()
+          .toLowerCase() === email.trim().toLowerCase()
+        &&
+        (r.Paket || r.D || "")
+          .trim()
+          .toUpperCase() === namaKelas.trim().toUpperCase()
+      )
+      .sort((a, b) => new Date(b.Tanggal) - new Date(a.Tanggal))[0];
+
+    if (!row) return true;
+
+    const keaktifan =
+      (row.Keaktifan || row.O || "")
+        .trim()
+        .toUpperCase();
+
+    const permission =
+      (row.Permission || row.P || "")
+        .trim()
+        .toUpperCase();
+
+    // O = AKTIF , P = kosong
+    if (keaktifan === "AKTIF" && permission === "") {
+
+      alert(
+        "⏳ Mohon tunggu 1 x 24 jam sedang diverifikasi"
+      );
+
+      return false;
+    }
+
+    // O = NO , P = OK
+    if (keaktifan === "NO" && permission === "OK") {
+
+      alert(
+        "⚠️ Masa berlaku habis, silahkan perpanjang dengan beli paket"
+      );
+
+      return false;
+    }
+
+    return true;
+
+  } catch (err) {
+
+    console.error(err);
+    return true;
 
   }
 
