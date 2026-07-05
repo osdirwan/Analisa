@@ -113,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <ul class="dropdown-menu">
           <li><a href="#">Sign Up</a></li>
           <li><a href="#">Log in</a></li>
+          <li><a href="#" id="menu-logout">Log out</a></li>
         </ul>
       </li>
 
@@ -263,14 +264,28 @@ Peserta dapat mencoba berbagai soal trial sebelum memutuskan membeli paket belaj
     Rp 0
   </div>
 
+</div>
+
+<div style="text-align:center; margin-top:20px;">
+
   <button
-    id="btn-konfirmasi-paket" 
+    id="btn-konfirmasi-paket"
     class="main-button">
-    
-  Lanjut
+    Lanjut
+  </button>
 
 </div>
 
+<div style="text-align:center; margin-top:12px;">
+
+  <button
+    id="btn-kembali-daftar-paket"
+    class="main-button kembali-btn"
+    type="button">
+    Kembali
+  </button>
+
+</div>
 <!-- SCRIPT TEMPEL DI SINI -->
 <script>
   function updateTotalBiaya() {
@@ -778,7 +793,24 @@ document.addEventListener(
 
   }
 );
+const btnKembali =
+  document.getElementById("btn-kembali-daftar-paket");
 
+if (btnKembali) {
+
+  btnKembali.addEventListener("click", () => {
+
+    document
+      .querySelectorAll(".halaman, .halaman-konten")
+      .forEach(el => {
+        el.style.display = "none";
+      });
+
+    document.getElementById("beranda").style.display = "block";
+
+  });
+
+}
 </script>
 
 </body>
