@@ -2627,3 +2627,20 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+function resetDaftarPaket() {
+
+  // Hilangkan semua pilihan radio
+  document.querySelectorAll(
+    '.subfolder-radio input[type="radio"]'
+  ).forEach(radio => {
+    radio.checked = false;
+    radio.defaultChecked = false;
+  });
+
+  // Reset total biaya
+  const total = document.getElementById("total-biaya");
+  if (total) {
+    total.textContent = "Rp 0";
+  }
+
+}
