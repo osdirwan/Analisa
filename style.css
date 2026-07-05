@@ -1043,24 +1043,7 @@ and (max-width:1023px){
   margin-right:auto !important;
 }
 header{
-  animation:
-    floatingHeader 4s ease-in-out infinite;
-}
-
-@keyframes floatingHeader{
-
-  0%{
-    transform:translateY(0);
-  }
-
-  50%{
-    transform:translateY(-3px);
-  }
-
-  100%{
-    transform:translateY(0);
-  }
-
+  animation:none;
 }
 .tombol-3d{
   position:relative;
@@ -1224,4 +1207,8 @@ header{
     background:linear-gradient(to bottom,#2e7d32,#1b5e20);
     color:#fff;
     border-color:#0d47a1;
+}
+#signup-btn{
+    display:block;
+    margin:20px auto 0;
 }
