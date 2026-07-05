@@ -2598,3 +2598,32 @@ async function cekStatusPaket(email, namaKelas) {
   }
 
 }
+document.addEventListener("DOMContentLoaded", () => {
+
+  const menuLogout =
+    document.getElementById("menu-logout");
+
+  if (!menuLogout) return;
+
+  menuLogout.addEventListener("click", function (e) {
+
+    e.preventDefault();
+
+    if (!confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
+      return;
+    }
+
+    // Hapus data login
+    window.loggedInEmail = null;
+    window.loggedInNama = null;
+    window.isTrialMode = false;
+
+    sessionStorage.clear();
+    localStorage.clear();
+
+    // Keluar ke Google
+    window.location.href = "https://www.google.com";
+
+  });
+
+});
