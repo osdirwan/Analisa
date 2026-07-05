@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <!-- MENU PEMBELIAN -->
       <li class="dropdown">
-        <a href="#">Pembelian</a>
+        <a href="#">Beli Paket</a>
         <ul class="dropdown-menu">
 <li>
   <a id="menu-daftar-paket"
@@ -202,7 +202,7 @@ Peserta dapat mencoba berbagai soal trial sebelum memutuskan membeli paket belaj
 
 3️⃣ Setelah memiliki akun, klik menu <b>Akun → Login</b> menggunakan email dan password yang telah didaftarkan.<br><br>
 
-4️⃣ Klik menu <b>Pembelian</b> untuk melihat paket belajar yang tersedia, kemudian pilih paket yang sesuai dengan kebutuhan.<br><br>
+4️⃣ Klik menu <b>Beli Paket</b> untuk melihat paket belajar yang tersedia, kemudian pilih paket yang sesuai dengan kebutuhan.<br><br>
 
 5️⃣ Lakukan pembayaran sesuai metode yang tersedia, kemudian kirim konfirmasi pembayaran melalui sistem.<br><br>
 
@@ -213,7 +213,7 @@ Peserta dapat mencoba berbagai soal trial sebelum memutuskan membeli paket belaj
 8️⃣ Kerjakan latihan soal secara rutin, kemudian pantau nilai dan perkembangan belajar melalui halaman <b>Data Prestasi</b>.<br><br>
 <div class="marquee-container">
   <div class="marquee-text">
-    🌟 Belajar Lebih Mudah, Lebih Cepat, dan Lebih Hemat bersama Bimbel Antiremed.
+    🌟 Belajar Lebih Mudah, Lebih Cepat, dan Lebih Hemat bersama Bimbel Antiremed
   </div>
 </div>
 </p>
@@ -308,10 +308,10 @@ Peserta dapat mencoba berbagai soal trial sebelum memutuskan membeli paket belaj
     total.toLocaleString("id-ID");
 
 }
-async function loadDaftarPaket() {
+async function loadDaftarPaket(filterPaket = null) {
 
   const spreadsheetId =
-    "1Xsq4Gl2MhJ1GhraiJ_r4Zc2_d40NHp1yQY0PjMmWcas";
+    "1XJxNFOri1o1ywVQynZRObZ5xJfXy3YfdQL0nuMJXa6g";
 
   const sheetName = "Sheet1";
 
@@ -342,28 +342,7 @@ async function loadDaftarPaket() {
     }
 
     data
-  .sort((a, b) => {
-
-    const colA =
-      a[Object.keys(a)[0]]
-      ?.toString()
-      .toLowerCase() || "";
-
-    const colB =
-      b[Object.keys(b)[0]]
-      ?.toString()
-      .toLowerCase() || "";
-
-    return colA.localeCompare(
-      colB,
-      undefined,
-      {
-        numeric: true,
-        sensitivity: "base"
-      }
-    );
-
-  })
+  
 
  .forEach(async (row, index) => {
 
@@ -371,9 +350,15 @@ async function loadDaftarPaket() {
     Object.keys(row)[0];
 
   const label =
-    row[firstColumn];
+  (row[firstColumn] || "").trim();
 
-  if (!label) return;
+if (!label) return;
+
+// jika dipanggil dari tombol kelas,
+// hanya tampilkan paket tersebut
+
+
+
 
   // CARD
   const card =
@@ -425,19 +410,40 @@ async function loadDaftarPaket() {
       await response.json();
 
     const hasil =
-      subfolderData.filter(item => {
+  subfolderData.filter(item => {
 
-        const kolom1 =
-          Object.values(item)[0]
-          ?.toString()
-          .trim();
+    const namaFolder =
+      (Object.values(item)[0] || "")
+      .toString()
+      .trim();
 
-        return kolom1 === label;
+    const namaSubfolder =
+      (Object.values(item)[1] || "")
+      .toString()
+      .trim();
 
-      });
+    if (namaFolder !== label) return false;
+
+    // jika dari menu Beli Paket
+    if (!filterPaket) return true;
+
+    // jika dari tombol TKA SD/TKA SMP/TKA SMA
+    return (
+      namaSubfolder.toUpperCase() ===
+      filterPaket.toUpperCase()
+    );
+
+  });
 
     if (hasil.length === 0) {
-
+      // Jika tidak ada subfolder yang cocok,
+// jangan tampilkan card paket.
+if (
+    filterPaket &&
+    hasil.length === 0
+){
+    return;
+}
       subfolderBox.innerHTML =
         "<div class='subfolder-item'>Tidak ada subfolder</div>";
 
@@ -471,11 +477,13 @@ async function loadDaftarPaket() {
         })
 
         .forEach(item => {
+        const namaSubfolder =
+          (Object.values(item)[1] || "").trim();
 
-          const namaSubfolder =
-            Object.values(item)[1];
+        if (!namaSubfolder) return;
 
-          if (!namaSubfolder) return;
+        // Sembunyikan folder SOAL TRIAL VERSION
+        if (namaSubfolder.toUpperCase() === "SOAL TRIAL VERSION") return;
 
           // ITEM
           const div =
@@ -763,7 +771,8 @@ document.addEventListener(
             "daftar-paket"
           )
           .style.display = "block";
-
+          // tampilkan semua paket
+          loadDaftarPaket();
       }
     );
 
@@ -1444,50 +1453,7 @@ TOMBOL 3 DIMENSI MODERN
 }
 </style>
 <script>
-async function loadDaftarPaket() {
 
-  const spreadsheetId = "1Xsq4Gl2MhJ1GhraiJ_r4Zc2_d40NHp1yQY0PjMmWcas";
-
-  const sheetName = "Sheet1";
-
-  const url =
-    `https://opensheet.elk.sh/${spreadsheetId}/${Sheet1}`;
-
-  try {
-
-    const response = await fetch(url);
-
-    const data = await response.json();
-
-    const container =
-      document.getElementById("container-daftar-paket");
-
-    container.innerHTML = "";
-
-    data.forEach(row => {
-
-      const label = Object.values(row)[0];
-
-      if (!label) return;
-
-      const button = document.createElement("button");
-
-      button.className = "btn-paket";
-
-      button.textContent = label;
-
-      container.appendChild(button);
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-  }
-}
-
-loadDaftarPaket();
 </script>
 <!-- HALAMAN KONFIRMASI PAKET -->
 <div
@@ -2727,7 +2693,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </button>
 
   <button id="exit-btn">
-    Keluar
+    Kembali
   </button>
 
 </div>
@@ -2893,7 +2859,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <div class="halaman-konten" id="signup-page">
   <form class="styled-login-form" id="signup-form">
     <h2>Sign Up</h2>
-    <input id="signup-email" placeholder="Email" required type="email" /><div id="email-info" class="info"></div><br/>
+    <input id="signup-email" placeholder="Email" required type="email" /><div id="email-info" class="info"></div>
     <input id="signup-nama" placeholder="Nama" required type="text" /><br/>
     <input id="signup-sekolah" placeholder="Asal Sekolah" required type="text" /><br/>
     
@@ -2903,15 +2869,14 @@ document.addEventListener("DOMContentLoaded", () => {
     <input id="signup-konfirmasi" placeholder="Konfirmasi Password" required type="password" />
     <div id="password-info" class="info"></div>
 
-    <label><input type="checkbox" id="toggle-password"> Tampilkan Password</label><br/>
-
-    <input id="signup-wa-ayah" placeholder="WA Ayah" type="text" /><div id="wa-ayah-info" class="info"></div><br/>
-    <input id="signup-wa-ibu" placeholder="WA Ibu" type="text" /><div id="wa-ibu-info" class="info"></div><br/>
-    <input id="signup-wa-anak" placeholder="WA Anak" type="text" /><div id="wa-anak-info" class="info"></div><br/>
+    <label><input type="checkbox" id="toggle-password"> Tampilkan Password</label><br/><br/>
+    <label>Whatsapp untuk kirim hasil kuis. Format : 6281234567890</label><br/><br/>
+    <input id="signup-wa-ayah" placeholder="WA Ayah" type="text" /><div id="wa-ayah-info" class="info"></div>
+    <input id="signup-wa-ibu" placeholder="WA Ibu" type="text" /><div id="wa-ibu-info" class="info"></div>
+    <input id="signup-wa-anak" placeholder="WA Siswa" type="text" /><div id="wa-anak-info" class="info"></div><br/>
 
     <label><input type="checkbox" id="setuju-syarat"> Saya menyetujui syarat & ketentuan</label><br/>
-
-    <button class="main-button" type="submit">OK</button>
+    <button id="signup-btn" class="main-button" type="submit">OK</button>
     <div id="signup-error" style="color: red; margin-top: 10px;"></div>
     <button class="main-button" id="signup-kembali" type="button">Kembali</button>
   </form>
@@ -3015,12 +2980,7 @@ emailInput.addEventListener("input", function () {
 
   })
 
-  .catch(() => {
 
-    emailInfo.textContent =
-      "⚠️ Tidak bisa cek email";
-
-  });
 
 });
 
@@ -3103,14 +3063,14 @@ emailInput.addEventListener("input", function () {
     formData.append("email", email);
     formData.append("nama", nama);
     formData.append("sekolah", sekolah);
-    
     formData.append("password", password);
+    
     formData.append("pesan", "");
     formData.append("waAyah", waAyah);
     formData.append("waIbu", waIbu);
     formData.append("waAnak", waAnak);
 
-    fetch("https://script.google.com/macros/s/AKfycbxpxYGQFPiPWNYONEkhEw1h0SKFnTdvlsbBP7WmgAitjFTdUlSK4sZ4RnUBjqHtw6KU/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbwGyhHvd9jwYOUi7m0ufJm2gC9kpVYboqxhwG_C7Dv_ijLcnx42IkUPpCoPvp23CdNokw/exec", {
       method: "POST",
       body: formData
     })
@@ -3124,6 +3084,11 @@ emailInput.addEventListener("input", function () {
         waInputs.forEach(id => document.getElementById(id + "-info").textContent = "");
         document.getElementById("signup-page").style.display = "none";
         document.getElementById("beranda").style.display = "block";
+         setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+ 
+      
       } else {
         errorEl.textContent = "❌ Gagal daftar: " + (result.message || "Terjadi kesalahan.");
       }
@@ -3133,6 +3098,7 @@ emailInput.addEventListener("input", function () {
     });
   });
 });
+
 </script>
 
 </script>
